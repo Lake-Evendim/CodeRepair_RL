@@ -1,0 +1,12 @@
+{
+  "task_id": "task_0011",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "validate_email allows consecutive dots in domain (missing '..' check).",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if not email:",
+    "new_text": "    if not email or \"..\" in email:"
+  },
+  "split": "seed"
+}

@@ -1,0 +1,12 @@
+{
+  "task_id": "task_0007",
+  "repo_type": "string_utils",
+  "bug_type": "string_validation",
+  "bug_description": "count_substring uses case-insensitive comparison instead of case-sensitive.",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    s_lower = s.lower()\n    sub_lower = sub.lower()\n    while True:\n        idx = s_lower.find(sub_lower, start)",
+    "new_text": "    while True:\n        idx = s.find(sub, start)"
+  },
+  "split": "seed"
+}

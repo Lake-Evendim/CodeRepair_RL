@@ -1,0 +1,12 @@
+{
+  "task_id": "task_0017",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "validate_phone allows phone numbers longer than 15 digits.",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    return cleaned.isdigit() and len(cleaned) >= 10",
+    "new_text": "    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
+  },
+  "split": "seed"
+}

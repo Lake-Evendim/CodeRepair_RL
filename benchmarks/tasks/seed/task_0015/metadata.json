@@ -1,0 +1,12 @@
+{
+  "task_id": "task_0015",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "validate_date_format only checks regex pattern, does not verify the date is real (accepts 2024-02-30).",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if not re.match(r\"^\\d{4}-\\d{2}-\\d{2}$\", date_str):\n        return False\n    return True",
+    "new_text": "    from datetime import datetime as _dt\n\n    if not re.match(r\"^\\d{4}-\\d{2}-\\d{2}$\", date_str):\n        return False\n    try:\n        _dt.strptime(date_str, \"%Y-%m-%d\")\n        return True\n    except ValueError:\n        return False"
+  },
+  "split": "seed"
+}

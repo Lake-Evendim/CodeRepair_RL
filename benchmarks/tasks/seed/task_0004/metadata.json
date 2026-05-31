@@ -1,0 +1,12 @@
+{
+  "task_id": "task_0004",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "pad_string computes padding as len(s)-min_width instead of min_width-len(s), producing wrong padding amount.",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    padding = fill_char * (len(s) - min_width)",
+    "new_text": "    padding = fill_char * (min_width - len(s))"
+  },
+  "split": "seed"
+}

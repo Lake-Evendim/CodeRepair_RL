@@ -1,0 +1,12 @@
+{
+  "task_id": "task_0008",
+  "repo_type": "string_utils",
+  "bug_type": "string_validation",
+  "bug_description": "reverse_words reverses characters within each word instead of reversing word order.",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    return \" \".join(w[::-1] for w in s.split())",
+    "new_text": "    return \" \".join(s.split()[::-1])"
+  },
+  "split": "seed"
+}

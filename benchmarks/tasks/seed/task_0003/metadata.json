@@ -1,0 +1,12 @@
+{
+  "task_id": "task_0003",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "reverse_words splits on single space only, failing to handle multiple consecutive spaces.",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    return \" \".join(s.split(\" \")[::-1])",
+    "new_text": "    return \" \".join(s.split()[::-1])"
+  },
+  "split": "seed"
+}

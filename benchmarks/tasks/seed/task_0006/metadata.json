@@ -1,0 +1,12 @@
+{
+  "task_id": "task_0006",
+  "repo_type": "string_utils",
+  "bug_type": "string_validation",
+  "bug_description": "truncate_string truncates at max_len-2 instead of max_len-3, producing one extra character.",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    return s[: max_len - 2] + \"...\"",
+    "new_text": "    return s[: max_len - 3] + \"...\""
+  },
+  "split": "seed"
+}
