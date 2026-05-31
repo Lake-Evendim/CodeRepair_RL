@@ -1,0 +1,53 @@
+# =========================
+# Core runtime
+# =========================
+numpy
+pandas
+tqdm
+pyyaml
+jsonlines
+pydantic
+typing-extensions
+rich
+
+# =========================
+# Testing / benchmark / sandbox
+# =========================
+pytest
+pytest-timeout
+coverage
+
+# =========================
+# Model loading / training
+# =========================
+transformers
+accelerate
+datasets
+safetensors
+tokenizers
+sentencepiece
+
+# =========================
+# LoRA / QLoRA / SFT
+# =========================
+peft
+trl
+
+# =========================
+# ModelScope model download
+# =========================
+modelscope
+
+# =========================
+# Visualization / reports
+# =========================
+matplotlib
+tabulate
+
+# =========================
+# Code quality / dev tools
+# =========================
+ruff
+black
+isort
+mypy
