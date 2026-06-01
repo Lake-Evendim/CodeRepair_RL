@@ -18,10 +18,9 @@ class TestValidateEmail:
 
 
 
-    def test_email_boundary_dots(self):
-        assert validate_email("user@example..com") is False
-        assert validate_email("user@.example.com") is False
-        assert validate_email("user@example.com.") is False
+    def test_email_boundary_at(self):
+        assert validate_email("@example.com") is False
+        assert validate_email("user@@example.com") is False
 class TestValidatePhone:
     def test_valid_10_digits(self):
         assert validate_phone("1234567890") is True

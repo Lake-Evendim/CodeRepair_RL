@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0118",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "rejects passwords containing spaces",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if \" \" in password:\n        return False\n    return has_upper and has_lower and has_digit and has_special",
+    "new_text": "    return has_upper and has_lower and has_digit and has_special"
+  },
+  "split": "test",
+  "variant_id": "val_pwd_s08"
+}

@@ -18,9 +18,8 @@ class TestValidateEmail:
 
 
 
-    def test_email_sv_full(self):
-        assert validate_email("@example.com") is False
-        assert validate_email("user@example..com") is False
+    def test_email_sv_allow_underscore(self):
+        assert validate_email("user_name@example.com") is True
 class TestValidatePhone:
     def test_valid_10_digits(self):
         assert validate_phone("1234567890") is True

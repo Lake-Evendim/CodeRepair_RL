@@ -1,6 +1,5 @@
 """Validation utility functions."""
 
-import re
 
 
 def validate_email(email: str) -> bool:
@@ -56,12 +55,10 @@ def validate_date_format(date_str: str) -> bool:
     """Validate date format."""
     from datetime import datetime as _dt
 
-    if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_str):
-        return False
-    try:
-        dt = _dt.strptime(date_str, "%Y-%m-%d")
-        if dt > _dt.now():
-            return False
-        return True
-    except ValueError:
-        return False
+    for fmt in ("%Y-%m-%d", "%d-%m-%Y"):
+        try:
+            _dt.strptime(date_str, fmt)
+            return True
+        except ValueError:
+            continue
+    return False

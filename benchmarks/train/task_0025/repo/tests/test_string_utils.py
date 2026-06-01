@@ -29,8 +29,8 @@ class TestCountSubstring:
 
 
 
-    def test_count_preserve_newlines(self):
-        assert count_substring("a\nb\na", "\n") == 2
+    def test_count_no_strip(self):
+        assert count_substring("  hello  ", " ") == 4
 class TestReverseWords:
     def test_basic_reverse(self):
         assert reverse_words("hello world") == "world hello"

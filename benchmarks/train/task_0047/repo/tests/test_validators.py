@@ -18,8 +18,8 @@ class TestValidateEmail:
 
 
 
-    def test_email_no_strip_spaces(self):
-        assert validate_email(" @example.com") is True
+    def test_email_domain_end_dot(self):
+        assert validate_email("user@example.com.") is False
 class TestValidatePhone:
     def test_valid_10_digits(self):
         assert validate_phone("1234567890") is True

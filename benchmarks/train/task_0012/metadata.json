@@ -2,12 +2,12 @@
   "task_id": "task_0012",
   "repo_type": "string_utils",
   "bug_type": "boundary",
-  "bug_description": "pads on the left instead of right",
+  "bug_description": "computes padding as len(s)-min_width (negative)",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    return padding + s",
-    "new_text": "    return s + padding"
+    "old_text": "    padding = fill_char * (len(s) - min_width)",
+    "new_text": "    padding = fill_char * (min_width - len(s))"
   },
   "split": "train",
-  "variant_id": "su_pad_b02"
+  "variant_id": "su_pad_b01"
 }

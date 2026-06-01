@@ -37,8 +37,10 @@ class TestReverseWords:
 
 
 
-    def test_reverse_no_upper(self):
-        assert reverse_words("Hello World") == "World Hello"
+    def test_reverse_space_join(self):
+        result = reverse_words("hello world")
+        assert "," not in result
+        assert result == "world hello"
 class TestPadString:
     def test_no_padding_needed(self):
         assert pad_string("hello", 5) == "hello"

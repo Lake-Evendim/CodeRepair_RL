@@ -4,15 +4,14 @@ import re
 
 
 def validate_email(email: str) -> bool:
-    """Validate email: reject underscores in local."""
+    """Validate email."""
+    email = email.strip()
     if not email or ".." in email:
         return False
     parts = email.split("@")
     if len(parts) != 2:
         return False
     local, domain = parts
-    if "_" in local:
-        return False
     if not local or not domain:
         return False
     if "." not in domain:

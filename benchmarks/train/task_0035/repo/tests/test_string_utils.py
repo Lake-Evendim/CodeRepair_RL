@@ -37,8 +37,8 @@ class TestReverseWords:
 
 
 
-    def test_reverse_not_sorted(self):
-        assert reverse_words("c b a") == "a b c"
+    def test_reverse_keep_duplicates(self):
+        assert reverse_words("hello hello world") == "world hello hello"
 class TestPadString:
     def test_no_padding_needed(self):
         assert pad_string("hello", 5) == "hello"

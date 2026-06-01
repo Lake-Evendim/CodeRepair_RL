@@ -2,12 +2,12 @@
   "task_id": "task_0015",
   "repo_type": "string_utils",
   "bug_type": "boundary",
-  "bug_description": "splits on single space, failing on multiple spaces",
+  "bug_description": "capitalizes first character of result",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    return \" \".join(s.split(\" \")[::-1])",
-    "new_text": "    return \" \".join(s.split()[::-1])"
+    "old_text": "    if result and result[0].islower():\n        result = result[0].upper() + result[1:]\n    return result",
+    "new_text": "    return result"
   },
   "split": "train",
-  "variant_id": "su_rev_b01"
+  "variant_id": "su_rev_b02"
 }

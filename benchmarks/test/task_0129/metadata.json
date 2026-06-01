@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0129",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "strips trailing whitespace from result",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    return result.rstrip()",
+    "new_text": "    return result"
+  },
+  "split": "test",
+  "variant_id": "su_cap_b04"
+}

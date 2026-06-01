@@ -48,9 +48,9 @@ class TestPadString:
 
 
 
-    def test_pad_no_lower(self):
-        result = pad_string("HI", 5)
-        assert result == "HI   "
+    def test_pad_keep_tabs(self):
+        result = pad_string("a	b", 5)
+        assert "	" in result
 class TestCapitalizeWords:
     def test_basic_capitalize(self):
         assert capitalize_words("hello world") == "Hello World"

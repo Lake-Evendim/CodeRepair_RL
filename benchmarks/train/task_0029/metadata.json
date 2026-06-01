@@ -2,12 +2,12 @@
   "task_id": "task_0029",
   "repo_type": "string_utils",
   "bug_type": "string_validation",
-  "bug_description": "strips whitespace from s before padding",
+  "bug_description": "lowercases s before padding",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    s = s.strip()\n    if len(s) >= min_width:",
+    "old_text": "    s = s.lower()\n    if len(s) >= min_width:",
     "new_text": "    if len(s) >= min_width:"
   },
   "split": "train",
-  "variant_id": "su_pad_s03"
+  "variant_id": "su_pad_s06"
 }

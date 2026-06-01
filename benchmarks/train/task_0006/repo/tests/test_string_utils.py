@@ -29,8 +29,8 @@ class TestCountSubstring:
 
 
 
-    def test_count_no_double_multi(self):
-        assert count_substring("aaa", "aa") == 1
+    def test_count_overlapping(self):
+        assert count_substring("banana", "ana") == 1
 class TestReverseWords:
     def test_basic_reverse(self):
         assert reverse_words("hello world") == "world hello"

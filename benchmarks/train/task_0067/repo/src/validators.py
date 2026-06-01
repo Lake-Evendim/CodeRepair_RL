@@ -5,7 +5,21 @@ import re
 
 def validate_email(email: str) -> bool:
     """Validate email."""
-    return "@" in email and "." in email.split("@")[-1]
+    if not email or ".." in email:
+        return False
+    parts = email.split("@")
+    if len(parts) != 2:
+        return False
+    local, domain = parts
+    if not local or not domain:
+        return False
+    if "." not in domain:
+        return False
+    if domain.startswith(".") or domain.endswith("."):
+        return False
+    if len(local) > 64:
+        return False
+    return True
 def validate_phone(phone: str) -> bool:
     """Validate phone: 10-15 digits, optional leading +, optional dashes/spaces between groups."""
     cleaned = phone.replace("-", "").replace(" ", "")

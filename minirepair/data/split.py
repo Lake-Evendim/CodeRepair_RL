@@ -30,12 +30,29 @@ def assign_splits(
     - val_per_combo variants for validation
     - test_candidates_per_combo candidates for test
     Then test is stratified-sampled to test_total.
+
+    Deduplication: variants sharing the same gold_patch (fix_old, fix_new)
+    are reduced to a single representative before splitting, ensuring no
+    cross-split gold_patch pair overlap.
     """
     rng = random.Random(seed)
 
+    # Deduplicate by gold_patch pair (fix_old, fix_new) to prevent cross-split overlap
+    seen_patches: set[tuple[str, str]] = set()
+    deduped: list[BugVariant] = []
+    for v in variants:
+        patch_key = (v.fix_old, v.fix_new)
+        if patch_key not in seen_patches:
+            seen_patches.add(patch_key)
+            deduped.append(v)
+
+    if len(deduped) < len(variants):
+        print(f"  Deduplication: {len(variants)} -> {len(deduped)} variants "
+              f"(removed {len(variants) - len(deduped)} with duplicate gold patches)")
+
     # Group by (repo_type, bug_type, function_name)
     groups: dict[tuple, list[BugVariant]] = defaultdict(list)
-    for v in variants:
+    for v in deduped:
         key = (v.repo_type, v.bug_type, v.function_name)
         groups[key].append(v)
 
@@ -46,13 +63,20 @@ def assign_splits(
     for key, group in sorted(groups.items()):
         shuffled = list(group)
         rng.shuffle(shuffled)
+        n = len(shuffled)
 
-        train.extend(shuffled[:train_per_combo])
-        val.extend(shuffled[train_per_combo:train_per_combo + val_per_combo])
-        test_candidates.extend(shuffled[
-            train_per_combo + val_per_combo:
-            train_per_combo + val_per_combo + test_candidates_per_combo
-        ])
+        # Reserve validation and test candidates first, then assign rest to train
+        actual_val = min(val_per_combo, n)
+        remaining_after_val = n - actual_val
+        actual_test = min(test_candidates_per_combo, remaining_after_val)
+        actual_train = n - actual_val - actual_test
+
+        # Clamp train to requested amount
+        actual_train = min(actual_train, train_per_combo)
+
+        val.extend(shuffled[:actual_val])
+        test_candidates.extend(shuffled[actual_val:actual_val + actual_test])
+        train.extend(shuffled[actual_val + actual_test:actual_val + actual_test + actual_train])
 
     # Stratified sampling from test_candidates to get test_total
     # Group test_candidates by (repo_type, bug_type, function_name)

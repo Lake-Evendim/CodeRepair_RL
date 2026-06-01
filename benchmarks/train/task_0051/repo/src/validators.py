@@ -29,8 +29,10 @@ def validate_phone(phone: str) -> bool:
 
 
 def validate_password_strength(password: str) -> bool:
-    """Validate password: require 10+ chars."""
-    if len(password) < 10:
+    """Validate password."""
+    if len(password) < 8:
+        return False
+    if len(password) > 20:
         return False
     has_upper = any(c.isupper() for c in password)
     has_lower = any(c.islower() for c in password)

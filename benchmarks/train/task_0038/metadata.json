@@ -2,12 +2,12 @@
   "task_id": "task_0038",
   "repo_type": "string_utils",
   "bug_type": "string_validation",
-  "bug_description": "replaces tabs with spaces before truncating",
+  "bug_description": "uppercases the result",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    s = s.replace(\"\t\", \" \")\n    if len(s) <= max_len:",
-    "new_text": "    if len(s) <= max_len:"
+    "old_text": "        return s.upper()",
+    "new_text": "        return s"
   },
   "split": "train",
-  "variant_id": "su_trunc_s05"
+  "variant_id": "su_trunc_s07"
 }

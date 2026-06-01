@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0095",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "only checks protocol prefix, no host/path validation",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    return url.startswith(\"http://\") or url.startswith(\"https://\")",
+    "new_text": "    if not url:\n        return False\n    if url.startswith(\"https://\"):\n        rest = url[8:]\n    elif url.startswith(\"http://\"):\n        rest = url[7:]\n    else:\n        return False\n    return len(rest) > 0 and \"/\" in rest"
+  },
+  "split": "validation",
+  "variant_id": "val_url_b07"
+}

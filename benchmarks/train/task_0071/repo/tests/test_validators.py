@@ -34,8 +34,8 @@ class TestValidatePasswordStrength:
 
 
 
-    def test_pwd_sv_pattern(self):
-        assert validate_password_strength("MyP@ssw0rd123456") is True
+    def test_pwd_no_common_words(self):
+        assert validate_password_strength("MyP@ssw0rd!") is True
 class TestValidateUrl:
     def test_valid_https(self):
         assert validate_url("https://example.com/path") is True

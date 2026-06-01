@@ -53,14 +53,14 @@ def validate_url(url: str) -> bool:
 
 
 def validate_date_format(date_str: str) -> bool:
-    """Validate date: reject weekends."""
+    """Validate date: reject after 2100."""
     from datetime import datetime as _dt
 
     if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_str):
         return False
     try:
         dt = _dt.strptime(date_str, "%Y-%m-%d")
-        if dt.weekday() >= 5:
+        if dt.year > 2100:
             return False
         return True
     except ValueError:

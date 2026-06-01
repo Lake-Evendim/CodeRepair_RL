@@ -18,8 +18,8 @@ class TestValidateEmail:
 
 
 
-    def test_email_domain_start_dot(self):
-        assert validate_email("user@.example.com") is False
+    def test_email_b07_allow_digits(self):
+        assert validate_email("user123@example.com") is True
 class TestValidatePhone:
     def test_valid_10_digits(self):
         assert validate_phone("1234567890") is True

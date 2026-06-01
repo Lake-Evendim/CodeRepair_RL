@@ -49,5 +49,6 @@ class TestValidateDateFormat:
         assert validate_date_format("01/15/2024") is False
 
 
-    def test_date_allow_old(self):
-        assert validate_date_format("1899-12-31") is True
+    def test_date_real_validation(self):
+        assert validate_date_format("2024-02-30") is False
+        assert validate_date_format("2024-13-01") is False

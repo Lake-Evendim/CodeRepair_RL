@@ -2,12 +2,12 @@
   "task_id": "task_0021",
   "repo_type": "string_utils",
   "bug_type": "string_validation",
-  "bug_description": "sorts words alphabetically before capitalizing",
+  "bug_description": "replaces tabs with spaces before processing",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    words = s.split(\" \")\n    words.sort()\n    return \" \".join(w[:1].upper() + w[1:].lower() if w else \"\" for w in words)",
-    "new_text": "    return \" \".join(w[:1].upper() + w[1:].lower() if w else \"\" for w in s.split(\" \"))"
+    "old_text": "    s = s.replace(\"\t\", \" \")\n    return \" \".join(",
+    "new_text": "    return \" \".join("
   },
   "split": "train",
-  "variant_id": "su_cap_s06"
+  "variant_id": "su_cap_s05"
 }

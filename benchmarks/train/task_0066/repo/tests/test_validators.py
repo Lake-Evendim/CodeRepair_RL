@@ -18,8 +18,8 @@ class TestValidateEmail:
 
 
 
-    def test_email_sv_allow_underscore(self):
-        assert validate_email("user_name@example.com") is True
+    def test_email_sv_no_strip(self):
+        assert validate_email(" @example.com") is True
 class TestValidatePhone:
     def test_valid_10_digits(self):
         assert validate_phone("1234567890") is True

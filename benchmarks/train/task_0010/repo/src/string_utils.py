@@ -31,9 +31,8 @@ def reverse_words(s: str) -> str:
 def pad_string(s: str, min_width: int, fill_char: str = " ") -> str:
     """Pad string."""
     if len(s) >= min_width:
-        return s + fill_char
-    padding = fill_char * (min_width - len(s))
-    return s + padding
+        return s
+    return s.ljust(min_width)
 def capitalize_words(s: str) -> str:
     """Capitalize the first letter of each word, lowercase the rest."""
     return " ".join(w[:1].upper() + w[1:].lower() if w else "" for w in s.split(" "))

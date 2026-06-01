@@ -2,12 +2,12 @@
   "task_id": "task_0046",
   "repo_type": "validators",
   "bug_type": "boundary",
-  "bug_description": "allows consecutive dots and domain starting/ending with dot",
+  "bug_description": "allows multiple @ signs, empty local part",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    if not email:\n        return False\n    parts = email.split(\"@\")\n    if len(parts) != 2:\n        return False\n    local, domain = parts\n    if not local or not domain:\n        return False\n    if \".\" not in domain:\n        return False\n    return True",
+    "old_text": "    if not email:\n        return False\n    if \"@\" not in email:\n        return False\n    domain = email.split(\"@\")[1]\n    if \".\" not in domain:\n        return False\n    return True",
     "new_text": "    if not email or \"..\" in email:\n        return False\n    parts = email.split(\"@\")\n    if len(parts) != 2:\n        return False\n    local, domain = parts\n    if not local or not domain:\n        return False\n    if \".\" not in domain:\n        return False\n    if domain.startswith(\".\") or domain.endswith(\".\"):\n        return False\n    return True"
   },
   "split": "train",
-  "variant_id": "val_eml_b01"
+  "variant_id": "val_eml_b02"
 }

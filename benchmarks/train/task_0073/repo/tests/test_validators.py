@@ -26,8 +26,8 @@ class TestValidatePhone:
 
 
 
-    def test_phone_sv_strip_method(self):
-        assert validate_phone("+1 (234) 567-8901") is False
+    def test_phone_sv_allow_double_zero(self):
+        assert validate_phone("0012345678") is True
 class TestValidatePasswordStrength:
     def test_strong_password(self):
         assert validate_password_strength("Abc12345!") is True

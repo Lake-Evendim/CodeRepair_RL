@@ -55,7 +55,5 @@ class TestCapitalizeWords:
         assert capitalize_words("") == ""
 
 
-    def test_cap_keep_punctuation(self):
-        result = capitalize_words("hello, world!")
-        assert "," in result
-        assert "!" in result
+    def test_cap_no_reverse(self):
+        assert capitalize_words("hello world") == "Hello World"

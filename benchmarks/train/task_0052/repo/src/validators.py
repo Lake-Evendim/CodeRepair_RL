@@ -29,9 +29,12 @@ def validate_phone(phone: str) -> bool:
 
 
 def validate_password_strength(password: str) -> bool:
-    """Validate password."""
-    if len(password) < 6:
+    """Validate password: reject 3+ consecutive same chars."""
+    if len(password) < 8:
         return False
+    for i in range(len(password) - 2):
+        if password[i] == password[i+1] == password[i+2]:
+            return False
     has_upper = any(c.isupper() for c in password)
     has_lower = any(c.islower() for c in password)
     has_digit = any(c.isdigit() for c in password)

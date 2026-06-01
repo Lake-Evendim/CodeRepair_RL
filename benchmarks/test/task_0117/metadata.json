@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0117",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "rejects local parts starting or ending with dot",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if local.startswith(\".\") or local.endswith(\".\"):\n        return False\n    return True",
+    "new_text": "    return True"
+  },
+  "split": "test",
+  "variant_id": "val_eml_s09"
+}

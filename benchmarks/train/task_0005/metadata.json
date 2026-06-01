@@ -2,12 +2,12 @@
   "task_id": "task_0005",
   "repo_type": "string_utils",
   "bug_type": "boundary",
-  "bug_description": "adds 1 to built-in count, always overcounting",
+  "bug_description": "uses wrong loop bound, missing match at end of string",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    return s.count(sub) + 1",
-    "new_text": "    return s.count(sub)"
+    "old_text": "    while start < len(s) - len(sub):",
+    "new_text": "    while True:"
   },
   "split": "train",
-  "variant_id": "su_cnt_b04"
+  "variant_id": "su_cnt_b05"
 }

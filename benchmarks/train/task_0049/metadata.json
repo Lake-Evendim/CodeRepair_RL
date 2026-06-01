@@ -2,12 +2,12 @@
   "task_id": "task_0049",
   "repo_type": "validators",
   "bug_type": "boundary",
-  "bug_description": "requires 2+ uppercase letters instead of 1",
+  "bug_description": "requires only 6 chars instead of 8",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    return uppers >= 2 and has_lower and has_digit and has_special",
-    "new_text": "    has_upper = any(c.isupper() for c in password)\n    return has_upper and has_lower and has_digit and has_special"
+    "old_text": "    if len(password) < 6:",
+    "new_text": "    if len(password) < 8:"
   },
   "split": "train",
-  "variant_id": "val_pwd_b04"
+  "variant_id": "val_pwd_b02"
 }

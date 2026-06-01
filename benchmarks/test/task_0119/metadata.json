@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0119",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "allows non-digit characters within length bounds",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    return len(cleaned) >= 10 and len(cleaned) <= 15",
+    "new_text": "    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
+  },
+  "split": "test",
+  "variant_id": "val_phn_s02"
+}

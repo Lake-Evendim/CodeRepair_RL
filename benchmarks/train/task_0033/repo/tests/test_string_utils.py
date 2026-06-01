@@ -37,7 +37,7 @@ class TestReverseWords:
 
 
 
-    def test_reverse_preserve_case(self):
+    def test_reverse_no_upper(self):
         assert reverse_words("Hello World") == "World Hello"
 class TestPadString:
     def test_no_padding_needed(self):

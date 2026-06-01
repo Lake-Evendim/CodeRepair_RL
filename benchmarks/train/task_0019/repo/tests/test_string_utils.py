@@ -18,9 +18,8 @@ class TestTruncateString:
 
 
 
-    def test_trunc_short_max_len(self):
-        result = truncate_string("hello", 3)
-        assert result == "..."
+    def test_trunc_exact_length(self):
+        assert truncate_string("hello", 5) == "hello"
 class TestCountSubstring:
     def test_basic_count(self):
         assert count_substring("hello world", "o") == 2

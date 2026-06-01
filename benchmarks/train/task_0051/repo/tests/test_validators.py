@@ -34,8 +34,8 @@ class TestValidatePasswordStrength:
 
 
 
-    def test_pwd_min_8_not_10(self):
-        assert validate_password_strength("Abc1234!") is True
+    def test_no_max_length(self):
+        assert validate_password_strength("Abc12345!Abc12345!Abc") is True
 class TestValidateUrl:
     def test_valid_https(self):
         assert validate_url("https://example.com/path") is True

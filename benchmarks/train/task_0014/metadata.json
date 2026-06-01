@@ -2,12 +2,12 @@
   "task_id": "task_0014",
   "repo_type": "string_utils",
   "bug_type": "boundary",
-  "bug_description": "appends trailing space to result",
+  "bug_description": "returns original string for empty split (preserves whitespace-only input)",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    return \" \".join(words[::-1]) + \" \"",
+    "old_text": "    if not words:\n        return s\n    return \" \".join(words[::-1])",
     "new_text": "    return \" \".join(words[::-1])"
   },
   "split": "train",
-  "variant_id": "su_rev_b06"
+  "variant_id": "su_rev_b08"
 }

@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0098",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "only checks length, not character diversity",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    return len(password) >= 8",
+    "new_text": "    if len(password) < 8:\n        return False\n    has_upper = any(c.isupper() for c in password)\n    has_lower = any(c.islower() for c in password)\n    has_digit = any(c.isdigit() for c in password)\n    has_special = any(not c.isalnum() for c in password)\n    return has_upper and has_lower and has_digit and has_special"
+  },
+  "split": "validation",
+  "variant_id": "val_pwd_s02"
+}

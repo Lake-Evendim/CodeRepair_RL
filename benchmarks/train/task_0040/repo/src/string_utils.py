@@ -3,7 +3,7 @@
 
 def truncate_string(s: str, max_len: int) -> str:
     """Truncate string."""
-    s = " ".join(s.split())
+    s = s.strip()
     if len(s) <= max_len:
         return s
     return s[: max_len - 3] + "..."

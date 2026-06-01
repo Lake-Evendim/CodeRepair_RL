@@ -37,7 +37,6 @@ def pad_string(s: str, min_width: int, fill_char: str = " ") -> str:
 
 
 def capitalize_words(s: str) -> str:
-    """Capitalize words, sorting."""
-    words = s.split(" ")
-    words.sort()
-    return " ".join(w[:1].upper() + w[1:].lower() if w else "" for w in words)
+    """Capitalize words."""
+    s = s.replace("	", " ")
+    return " ".join(w[:1].upper() + w[1:].lower() if w else "" for w in s.split(" "))

@@ -546,7 +546,32 @@ def _build_public_test(repo_type: str, variant: BugVariant) -> str:
 
 def _write_file(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
+    if content and not content.endswith("\n"):
+        content += "\n"
     path.write_text(content, encoding="utf-8")
+
+
+def _strip_unused_re_import(source: str) -> str:
+    """Remove 'import re' if 're' is not used elsewhere in the file."""
+    if "import re" not in source:
+        return source
+    # Check if 're.' or 're(' or 're,' or 're\n' appears outside the import line
+    lines = source.split("\n")
+    import_line_idx = None
+    for i, line in enumerate(lines):
+        if line.strip() == "import re":
+            import_line_idx = i
+            break
+    if import_line_idx is None:
+        return source
+    # Check if re is used anywhere else
+    other_lines = lines[:import_line_idx] + lines[import_line_idx + 1:]
+    other_text = "\n".join(other_lines)
+    if "re." in other_text or "re(" in other_text or "re," in other_text:
+        return source
+    # Remove the import line
+    lines.pop(import_line_idx)
+    return "\n".join(lines)
 
 
 def generate_task(
@@ -575,6 +600,7 @@ def generate_task(
 
     # Build buggy source
     buggy_source = _replace_function(clean_source, variant.function_name, variant.buggy_code)
+    buggy_source = _strip_unused_re_import(buggy_source)
 
     # Build public tests with variant-specific test
     public_tests = _build_public_test(variant.repo_type, variant)

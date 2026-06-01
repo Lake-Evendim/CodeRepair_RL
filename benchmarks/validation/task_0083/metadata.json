@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0083",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "adds one extra padding character",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    padding = fill_char * (min_width - len(s) + 1)",
+    "new_text": "    padding = fill_char * (min_width - len(s))"
+  },
+  "split": "validation",
+  "variant_id": "su_pad_b04"
+}

@@ -2,12 +2,12 @@
   "task_id": "task_0008",
   "repo_type": "string_utils",
   "bug_type": "boundary",
-  "bug_description": "uses wrong loop bound, missing match at end of string",
+  "bug_description": "initializes count to 1, always overcounting by 1",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    while start < len(s) - len(sub):",
-    "new_text": "    while True:"
+    "old_text": "    count = 1",
+    "new_text": "    count = 0"
   },
   "split": "train",
-  "variant_id": "su_cnt_b05"
+  "variant_id": "su_cnt_b02"
 }

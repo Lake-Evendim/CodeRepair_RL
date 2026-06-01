@@ -22,9 +22,12 @@ def validate_email(email: str) -> bool:
 
 def validate_phone(phone: str) -> bool:
     """Validate phone."""
-    import re
-    cleaned = re.sub(r"\D", "", phone)
-    return 10 <= len(cleaned) <= 15
+    cleaned = phone.replace("-", "").replace(" ", "")
+    if cleaned.startswith("+"):
+        cleaned = cleaned[1:]
+    if cleaned.startswith("00"):
+        return False
+    return cleaned.isdigit() and 10 <= len(cleaned) <= 15
 def validate_password_strength(password: str) -> bool:
     """Validate password: >=8 chars, has upper, lower, digit, special char."""
     if len(password) < 8:

@@ -2,12 +2,12 @@
   "task_id": "task_0025",
   "repo_type": "string_utils",
   "bug_type": "string_validation",
-  "bug_description": "replaces newlines before counting, losing newline matches",
+  "bug_description": "strips s before counting, losing leading/trailing matches",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    s = s.replace(\"\\n\", \" \")\n    return s.count(sub)",
+    "old_text": "    return s.strip().count(sub)",
     "new_text": "    return s.count(sub)"
   },
   "split": "train",
-  "variant_id": "su_cnt_s05"
+  "variant_id": "su_cnt_s03"
 }

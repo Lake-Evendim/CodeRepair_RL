@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0124",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "strips spaces from email before validation",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    email = email.replace(\" \", \"\")\n    parts = email.split(\"@\")",
+    "new_text": "    parts = email.split(\"@\")"
+  },
+  "split": "test",
+  "variant_id": "val_eml_b05"
+}

@@ -29,14 +29,14 @@ def validate_phone(phone: str) -> bool:
 
 
 def validate_password_strength(password: str) -> bool:
-    """Validate password: need 2+ uppercase."""
-    if len(password) < 8:
+    """Validate password."""
+    if len(password) < 6:
         return False
-    uppers = sum(1 for c in password if c.isupper())
+    has_upper = any(c.isupper() for c in password)
     has_lower = any(c.islower() for c in password)
     has_digit = any(c.isdigit() for c in password)
     has_special = any(not c.isalnum() for c in password)
-    return uppers >= 2 and has_lower and has_digit and has_special
+    return has_upper and has_lower and has_digit and has_special
 def validate_url(url: str) -> bool:
     """Validate URL: must start with http:// or https://, then non-empty host."""
     if not url:

@@ -12,7 +12,15 @@ def count_substring(s: str, sub: str) -> int:
     """Count occurrences."""
     if not sub:
         return 0
-    return s.count(sub) + 1
+    count = 0
+    start = 0
+    while start < len(s) - len(sub):
+        idx = s.find(sub, start)
+        if idx == -1:
+            break
+        count += 1
+        start = idx + len(sub)
+    return count
 def reverse_words(s: str) -> str:
     """Reverse the order of words in a string. Preserve internal spacing style by returning single spaces."""
     return " ".join(s.split()[::-1])

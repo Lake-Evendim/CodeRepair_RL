@@ -48,10 +48,8 @@ class TestPadString:
 
 
 
-    def test_pad_extra_char(self):
-        result = pad_string("hi", 5)
-        assert len(result) == 5
-        assert result == "hi   "
+    def test_pad_right(self):
+        assert pad_string("hi", 5) == "hi   "
 class TestCapitalizeWords:
     def test_basic_capitalize(self):
         assert capitalize_words("hello world") == "Hello World"

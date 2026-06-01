@@ -41,7 +41,6 @@ def validate_password_strength(password: str) -> bool:
 
 def validate_url(url: str) -> bool:
     """Validate URL."""
-    url = url.rstrip("/")
     if not url:
         return False
     if url.startswith("https://"):
@@ -50,7 +49,7 @@ def validate_url(url: str) -> bool:
         rest = url[7:]
     else:
         return False
-    return len(rest) > 0 and "/" in rest
+    return "/" in rest and len(rest) > 3
 def validate_date_format(date_str: str) -> bool:
     """Validate date string is YYYY-MM-DD and represents a real date."""
     from datetime import datetime as _dt

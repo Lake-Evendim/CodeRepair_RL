@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0087",
+  "repo_type": "string_utils",
+  "bug_type": "string_validation",
+  "bug_description": "replaces newlines before counting, losing newline matches",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    s = s.replace(\"\\n\", \" \")\n    return s.count(sub)",
+    "new_text": "    return s.count(sub)"
+  },
+  "split": "validation",
+  "variant_id": "su_cnt_s05"
+}

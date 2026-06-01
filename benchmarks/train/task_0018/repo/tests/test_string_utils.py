@@ -18,9 +18,10 @@ class TestTruncateString:
 
 
 
-    def test_trunc_wrong_suffix(self):
+    def test_trunc_off_by_one(self):
         result = truncate_string("hello world", 8)
-        assert result.endswith("...")
+        assert len(result) <= 8
+        assert result == "hello..."
 class TestCountSubstring:
     def test_basic_count(self):
         assert count_substring("hello world", "o") == 2

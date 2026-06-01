@@ -55,6 +55,7 @@ class TestCapitalizeWords:
         assert capitalize_words("") == ""
 
 
-    def test_cap_no_rstrip(self):
-        result = capitalize_words("hello world  ")
-        assert result.endswith("  ")
+    def test_cap_b08_space_join(self):
+        result = capitalize_words("hello world")
+        assert result == "Hello World"
+        assert "-" not in result

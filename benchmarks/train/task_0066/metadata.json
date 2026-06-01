@@ -2,12 +2,12 @@
   "task_id": "task_0066",
   "repo_type": "validators",
   "bug_type": "string_validation",
-  "bug_description": "rejects emails with underscores in local part",
+  "bug_description": "strips whitespace before validation",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    if \"_\" in local:\n        return False\n    if not local or not domain:",
-    "new_text": "    if not local or not domain:"
+    "old_text": "    email = email.strip()\n    if not email or \"..\" in email:",
+    "new_text": "    if not email or \"..\" in email:"
   },
   "split": "train",
-  "variant_id": "val_eml_s07"
+  "variant_id": "val_eml_s05"
 }

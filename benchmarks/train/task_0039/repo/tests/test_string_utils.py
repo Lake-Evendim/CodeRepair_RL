@@ -18,9 +18,10 @@ class TestTruncateString:
 
 
 
-    def test_trunc_no_title(self):
-        result = truncate_string("hello", 5)
-        assert result == "hello"
+    def test_trunc_ascii_ellipsis(self):
+        result = truncate_string("hello world", 8)
+        assert "..." in result
+        assert "…" not in result
 class TestCountSubstring:
     def test_basic_count(self):
         assert count_substring("hello world", "o") == 2

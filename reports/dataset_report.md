@@ -51,11 +51,11 @@
 
 | Task | Public | Private | Quality/Hidden |
 |------|--------|---------|----------------|
-| task_0001 | 13 | 7 | 3 (quality) |
-| task_0002 | 13 | 7 | 3 (quality) |
-| task_0003 | 13 | 7 | 3 (quality) |
-| task_0004 | 13 | 7 | 3 (quality) |
-| task_0005 | 13 | 7 | 3 (quality) |
+| task_0081 | 13 | 7 | 3 (quality) |
+| task_0082 | 13 | 7 | 3 (quality) |
+| task_0083 | 13 | 7 | 3 (quality) |
+| task_0084 | 13 | 7 | 3 (quality) |
+| task_0085 | 13 | 7 | 3 (quality) |
 | ... | ... | ... | ... |
 
 ## Test Split
@@ -80,11 +80,11 @@
 
 | Task | Public | Private | Quality/Hidden |
 |------|--------|---------|----------------|
-| task_0001 | 13 | 7 | 5 (hidden) |
-| task_0002 | 13 | 7 | 5 (hidden) |
-| task_0003 | 13 | 7 | 5 (hidden) |
-| task_0004 | 13 | 7 | 5 (hidden) |
-| task_0005 | 13 | 7 | 5 (hidden) |
+| task_0101 | 13 | 7 | 5 (hidden) |
+| task_0102 | 13 | 7 | 5 (hidden) |
+| task_0103 | 13 | 7 | 5 (hidden) |
+| task_0104 | 13 | 7 | 5 (hidden) |
+| task_0105 | 13 | 7 | 5 (hidden) |
 | ... | ... | ... | ... |
 
 ## Cross-Split Deduplication Analysis
@@ -93,16 +93,16 @@
 
 | Comparison | Overlap |
 |------------|---------|
-| train ∩ validation | 5 |
-| train ∩ test | 5 |
-| validation ∩ test | 1 |
+| train ∩ validation | 0 |
+| train ∩ test | 0 |
+| validation ∩ test | 0 |
 
 ### Bug Description Overlap
 
 | Comparison | Overlap |
 |------------|---------|
-| train ∩ validation | 2 |
-| train ∩ test | 3 |
+| train ∩ validation | 0 |
+| train ∩ test | 0 |
 | validation ∩ test | 0 |
 
 ## Summary
@@ -111,4 +111,4 @@
 - **Train:** 80
 - **Validation:** 20
 - **Test:** 30
-- **Gold patch pair duplicates across splits:** 11
+- **Gold patch pair duplicates across splits:** 0

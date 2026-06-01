@@ -2,12 +2,12 @@
   "task_id": "task_0067",
   "repo_type": "validators",
   "bug_type": "string_validation",
-  "bug_description": "minimal validation with split-based check",
+  "bug_description": "rejects local parts longer than 64 chars",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    return \"@\" in email and \".\" in email.split(\"@\")[-1]",
-    "new_text": "    if not email or \"..\" in email:\n        return False\n    parts = email.split(\"@\")\n    if len(parts) != 2:\n        return False\n    local, domain = parts\n    if not local or not domain:\n        return False\n    if \".\" not in domain:\n        return False\n    if domain.startswith(\".\") or domain.endswith(\".\"):\n        return False\n    return True"
+    "old_text": "    if len(local) > 64:\n        return False\n    return True",
+    "new_text": "    return True"
   },
   "split": "train",
-  "variant_id": "val_eml_s03"
+  "variant_id": "val_eml_s08"
 }

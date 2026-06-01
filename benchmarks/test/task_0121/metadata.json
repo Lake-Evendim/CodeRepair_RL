@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0121",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "rejects dates before year 1900",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "        if int(date_str[:4]) < 1900:\n            return False\n        return True",
+    "new_text": "        return True"
+  },
+  "split": "test",
+  "variant_id": "val_dat_s10"
+}

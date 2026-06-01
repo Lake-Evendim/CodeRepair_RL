@@ -18,9 +18,9 @@ class TestValidateEmail:
 
 
 
-    def test_email_sv_minimal(self):
-        assert validate_email("@.") is False
-        assert validate_email("user@") is False
+    def test_email_sv_no_local_limit(self):
+        long_local = "a" * 65
+        assert validate_email(f"{long_local}@example.com") is True
 class TestValidatePhone:
     def test_valid_10_digits(self):
         assert validate_phone("1234567890") is True

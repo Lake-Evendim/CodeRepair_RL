@@ -2,12 +2,12 @@
   "task_id": "task_0010",
   "repo_type": "string_utils",
   "bug_type": "boundary",
-  "bug_description": "adds extra fill_char when string already meets min_width",
+  "bug_description": "ignores fill_char, always using spaces",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "        return s + fill_char",
-    "new_text": "        return s"
+    "old_text": "    return s.ljust(min_width)",
+    "new_text": "    padding = fill_char * (min_width - len(s))\n    return s + padding"
   },
   "split": "train",
-  "variant_id": "su_pad_b03"
+  "variant_id": "su_pad_b06"
 }

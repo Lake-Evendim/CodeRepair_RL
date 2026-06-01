@@ -40,10 +40,10 @@ def validate_password_strength(password: str) -> bool:
 
 
 def validate_url(url: str) -> bool:
-    """Validate URL."""
+    """Validate URL: also accept ssh."""
     if not url:
         return False
-    for prefix in ("https://", "http://", "ftp://"):
+    for prefix in ("https://", "http://", "ssh://"):
         if url.startswith(prefix):
             rest = url[len(prefix):]
             return len(rest) > 0 and "/" in rest

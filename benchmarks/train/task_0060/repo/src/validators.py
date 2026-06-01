@@ -40,14 +40,19 @@ def validate_password_strength(password: str) -> bool:
 
 
 def validate_url(url: str) -> bool:
-    """Validate URL."""
+    """Validate URL: reject IP addresses."""
     if not url:
         return False
-    for prefix in ("https://", "http://", "ftp://"):
-        if url.startswith(prefix):
-            rest = url[len(prefix):]
-            return len(rest) > 0 and "/" in rest
-    return False
+    if url.startswith("https://"):
+        rest = url[8:]
+    elif url.startswith("http://"):
+        rest = url[7:]
+    else:
+        return False
+    host = rest.split("/")[0]
+    if host.replace(".", "").isdigit():
+        return False
+    return len(rest) > 0 and "/" in rest
 def validate_date_format(date_str: str) -> bool:
     """Validate date string is YYYY-MM-DD and represents a real date."""
     from datetime import datetime as _dt

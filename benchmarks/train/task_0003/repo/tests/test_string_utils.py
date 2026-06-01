@@ -55,5 +55,5 @@ class TestCapitalizeWords:
         assert capitalize_words("") == ""
 
 
-    def test_cap_empty(self):
-        assert capitalize_words("") == ""
+    def test_cap_rest_lower(self):
+        assert capitalize_words("hELLo WoRLD") == "Hello World"

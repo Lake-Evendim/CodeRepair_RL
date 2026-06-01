@@ -3,10 +3,9 @@
 
 def truncate_string(s: str, max_len: int) -> str:
     """Truncate string."""
-    s = s.replace("	", " ")
     if len(s) <= max_len:
-        return s
-    return s[: max_len - 3] + "..."
+        return s.upper()
+    return s[: max_len - 3].upper() + "..."
 def count_substring(s: str, sub: str) -> int:
     """Count non-overlapping occurrences of sub in s (case-sensitive)."""
     if not sub:

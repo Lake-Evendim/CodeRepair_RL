@@ -48,9 +48,9 @@ class TestPadString:
 
 
 
-    def test_pad_multi_char_fill(self):
-        result = pad_string("x", 4, "ab")
-        assert result == "xababab"
+    def test_pad_no_normalize(self):
+        result = pad_string("a  b", 6)
+        assert result == "a  b  "
 class TestCapitalizeWords:
     def test_basic_capitalize(self):
         assert capitalize_words("hello world") == "Hello World"

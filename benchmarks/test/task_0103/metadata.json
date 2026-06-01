@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0103",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "adds extra fill_char when string already meets min_width",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "        return s + fill_char",
+    "new_text": "        return s"
+  },
+  "split": "test",
+  "variant_id": "su_pad_b03"
+}

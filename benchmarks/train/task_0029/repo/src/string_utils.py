@@ -30,7 +30,7 @@ def reverse_words(s: str) -> str:
 
 def pad_string(s: str, min_width: int, fill_char: str = " ") -> str:
     """Pad string."""
-    s = s.strip()
+    s = s.lower()
     if len(s) >= min_width:
         return s
     padding = fill_char * (min_width - len(s))

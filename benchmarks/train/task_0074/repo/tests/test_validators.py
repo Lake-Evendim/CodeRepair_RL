@@ -26,8 +26,8 @@ class TestValidatePhone:
 
 
 
-    def test_phone_sv_digits(self):
-        assert validate_phone("123-456-7890x") is False
+    def test_phone_sv_allow_same_digits(self):
+        assert validate_phone("1111111111") is True
 class TestValidatePasswordStrength:
     def test_strong_password(self):
         assert validate_password_strength("Abc12345!") is True

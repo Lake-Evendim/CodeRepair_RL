@@ -2,12 +2,12 @@
   "task_id": "task_0044",
   "repo_type": "validators",
   "bug_type": "boundary",
-  "bug_description": "rejects dates after year 2100",
+  "bug_description": "returns True for invalid dates that match length",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "        if dt.year > 2100:\n            return False\n        return True",
-    "new_text": "        return True"
+    "old_text": "    except ValueError:\n        return len(date_str) == 10",
+    "new_text": "    except ValueError:\n        return False"
   },
   "split": "train",
-  "variant_id": "val_dat_b04"
+  "variant_id": "val_dat_b08"
 }

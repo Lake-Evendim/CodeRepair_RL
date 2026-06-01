@@ -2,12 +2,12 @@
   "task_id": "task_0070",
   "repo_type": "validators",
   "bug_type": "string_validation",
-  "bug_description": "rejects passwords containing common words",
+  "bug_description": "rejects passwords with leading/trailing whitespace",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    lower = password.lower()\n    for word in (\"password\", \"123456\", \"qwerty\", \"abc123\"):\n        if word in lower:\n            return False\n    has_upper",
-    "new_text": "    has_upper"
+    "old_text": "    if password != password.strip():\n        return False\n    return has_upper and has_lower and has_digit and has_special",
+    "new_text": "    return has_upper and has_lower and has_digit and has_special"
   },
   "split": "train",
-  "variant_id": "val_pwd_s04"
+  "variant_id": "val_pwd_s09"
 }

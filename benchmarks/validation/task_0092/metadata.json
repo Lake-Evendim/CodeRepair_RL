@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0092",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "does not check if domain starts with dot",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if domain.endswith(\".\"):\n        return False\n    return True",
+    "new_text": "    if domain.startswith(\".\") or domain.endswith(\".\"):\n        return False\n    return True"
+  },
+  "split": "validation",
+  "variant_id": "val_eml_b04"
+}

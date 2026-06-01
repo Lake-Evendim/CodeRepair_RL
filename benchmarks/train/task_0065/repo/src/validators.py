@@ -4,13 +4,20 @@ import re
 
 
 def validate_email(email: str) -> bool:
-    """Validate email."""
-    if not email:
+    """Validate email: reject underscores in local."""
+    if not email or ".." in email:
         return False
-    if "@" not in email:
+    parts = email.split("@")
+    if len(parts) != 2:
         return False
-    domain = email.split("@")[1]
+    local, domain = parts
+    if "_" in local:
+        return False
+    if not local or not domain:
+        return False
     if "." not in domain:
+        return False
+    if domain.startswith(".") or domain.endswith("."):
         return False
     return True
 def validate_phone(phone: str) -> bool:

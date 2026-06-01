@@ -29,8 +29,8 @@ class TestCountSubstring:
 
 
 
-    def test_count_no_upper(self):
-        assert count_substring("Hello", "Hello") == 1
+    def test_count_no_strip_sub(self):
+        assert count_substring("hello  world", "  ") == 1
 class TestReverseWords:
     def test_basic_reverse(self):
         assert reverse_words("hello world") == "world hello"

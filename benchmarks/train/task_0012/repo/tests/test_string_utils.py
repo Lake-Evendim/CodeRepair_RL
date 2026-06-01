@@ -48,7 +48,7 @@ class TestPadString:
 
 
 
-    def test_pad_right(self):
+    def test_pad_wrong_math(self):
         assert pad_string("hi", 5) == "hi   "
 class TestCapitalizeWords:
     def test_basic_capitalize(self):

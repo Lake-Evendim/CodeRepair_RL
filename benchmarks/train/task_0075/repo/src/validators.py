@@ -25,7 +25,7 @@ def validate_phone(phone: str) -> bool:
     cleaned = phone.replace("-", "").replace(" ", "")
     if cleaned.startswith("+"):
         cleaned = cleaned[1:]
-    return len(cleaned) >= 10 and len(cleaned) <= 15
+    return cleaned.isdigit() and 10 <= len(cleaned) <= 12
 def validate_password_strength(password: str) -> bool:
     """Validate password: >=8 chars, has upper, lower, digit, special char."""
     if len(password) < 8:

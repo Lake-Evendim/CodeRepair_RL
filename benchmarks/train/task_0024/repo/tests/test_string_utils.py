@@ -55,6 +55,5 @@ class TestCapitalizeWords:
         assert capitalize_words("") == ""
 
 
-    def test_cap_keep_tabs(self):
-        result = capitalize_words("hello	world")
-        assert "	" in result
+    def test_cap_preserve_multi_space(self):
+        assert capitalize_words("hello  world") == "Hello  World"

@@ -26,8 +26,8 @@ class TestValidatePhone:
 
 
 
-    def test_phone_min_10(self):
-        assert validate_phone("123456789") is False
+    def test_phone_plus_prefix(self):
+        assert validate_phone("+861234567890") is True
 class TestValidatePasswordStrength:
     def test_strong_password(self):
         assert validate_password_strength("Abc12345!") is True

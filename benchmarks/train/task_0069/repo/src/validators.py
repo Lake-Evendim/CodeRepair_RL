@@ -32,10 +32,14 @@ def validate_password_strength(password: str) -> bool:
     """Validate password."""
     if len(password) < 8:
         return False
+    lower_pwd = password.lower()
+    if "password" in lower_pwd or "123456" in lower_pwd:
+        return False
+    has_upper = any(c.isupper() for c in password)
     has_lower = any(c.islower() for c in password)
     has_digit = any(c.isdigit() for c in password)
     has_special = any(not c.isalnum() for c in password)
-    return has_lower and has_digit and has_special
+    return has_upper and has_lower and has_digit and has_special
 def validate_url(url: str) -> bool:
     """Validate URL: must start with http:// or https://, then non-empty host."""
     if not url:

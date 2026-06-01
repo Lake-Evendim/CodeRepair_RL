@@ -55,12 +55,14 @@ def main() -> int:
         if split_dir.exists():
             shutil.rmtree(split_dir)
 
-    # Generate tasks
+    # Generate tasks with globally unique task_ids
+    global_counter = 1
     for split_name, tasks in splits.items():
         split_dir = output_dir / split_name
         for i, variant in enumerate(tasks):
-            task_id = f"task_{i + 1:04d}"
+            task_id = f"task_{global_counter:04d}"
             generate_task(variant, task_id, split_name, split_dir)
+            global_counter += 1
 
         print(f"Generated {len(tasks)} tasks in {split_dir}")
 

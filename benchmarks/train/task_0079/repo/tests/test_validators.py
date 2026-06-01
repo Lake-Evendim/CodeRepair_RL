@@ -42,8 +42,8 @@ class TestValidateUrl:
 
 
 
-    def test_url_sv_rstrip(self):
-        assert validate_url("https://example.com/") is True
+    def test_url_sv_short_path(self):
+        assert validate_url("http://x/1") is True
 class TestValidateDateFormat:
     def test_valid_date(self):
         assert validate_date_format("2024-01-15") is True

@@ -26,8 +26,7 @@ class TestValidatePhone:
 
 
 
-    def test_phone_boundary_digits(self):
-        assert validate_phone("123-456-7890x") is False
+    def test_phone_no_upper(self):
         assert validate_phone("1234567890123456") is False
 class TestValidatePasswordStrength:
     def test_strong_password(self):

@@ -2,12 +2,12 @@
   "task_id": "task_0032",
   "repo_type": "string_utils",
   "bug_type": "string_validation",
-  "bug_description": "lowercases s before padding",
+  "bug_description": "replaces tabs with spaces before padding",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    s = s.lower()\n    if len(s) >= min_width:",
+    "old_text": "    s = s.replace(\"\t\", \" \")\n    if len(s) >= min_width:",
     "new_text": "    if len(s) >= min_width:"
   },
   "split": "train",
-  "variant_id": "su_pad_s06"
+  "variant_id": "su_pad_s07"
 }

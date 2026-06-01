@@ -42,8 +42,8 @@ class TestValidateUrl:
 
 
 
-    def test_url_allow_port(self):
-        assert validate_url("http://localhost:8080/api") is True
+    def test_url_allow_query(self):
+        assert validate_url("https://example.com/path?q=1") is True
 class TestValidateDateFormat:
     def test_valid_date(self):
         assert validate_date_format("2024-01-15") is True

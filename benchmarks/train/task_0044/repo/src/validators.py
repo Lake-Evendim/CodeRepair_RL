@@ -53,15 +53,13 @@ def validate_url(url: str) -> bool:
 
 
 def validate_date_format(date_str: str) -> bool:
-    """Validate date: reject after 2100."""
+    """Validate date format."""
     from datetime import datetime as _dt
 
     if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_str):
         return False
     try:
-        dt = _dt.strptime(date_str, "%Y-%m-%d")
-        if dt.year > 2100:
-            return False
+        _dt.strptime(date_str, "%Y-%m-%d")
         return True
     except ValueError:
-        return False
+        return len(date_str) == 10

@@ -37,8 +37,10 @@ class TestReverseWords:
 
 
 
-    def test_reverse_empty(self):
-        assert reverse_words("") == ""
+    def test_reverse_no_trailing_space(self):
+        result = reverse_words("hello world")
+        assert result == "world hello"
+        assert not result.endswith(" ")
 class TestPadString:
     def test_no_padding_needed(self):
         assert pad_string("hello", 5) == "hello"

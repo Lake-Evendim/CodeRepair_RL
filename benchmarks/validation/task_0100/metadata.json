@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0100",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "rejects URLs where path starts immediately after protocol",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    return len(rest) > 0 and \"/\" in rest and not rest.startswith(\"/\")",
+    "new_text": "    return len(rest) > 0 and \"/\" in rest"
+  },
+  "split": "validation",
+  "variant_id": "val_url_s10"
+}

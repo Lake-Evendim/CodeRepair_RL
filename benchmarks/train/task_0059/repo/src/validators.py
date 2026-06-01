@@ -40,16 +40,16 @@ def validate_password_strength(password: str) -> bool:
 
 
 def validate_url(url: str) -> bool:
-    """Validate URL: reject port numbers."""
+    """Validate URL: reject query params."""
     if not url:
+        return False
+    if "?" in url:
         return False
     if url.startswith("https://"):
         rest = url[8:]
     elif url.startswith("http://"):
         rest = url[7:]
     else:
-        return False
-    if ":" in rest.split("/")[0]:
         return False
     return len(rest) > 0 and "/" in rest
 def validate_date_format(date_str: str) -> bool:

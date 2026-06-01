@@ -26,9 +26,8 @@ def count_substring(s: str, sub: str) -> int:
 def reverse_words(s: str) -> str:
     """Reverse word order."""
     words = s.split()
-    if not words:
-        return " "
-    return " ".join(words[::-1])
+    result = " ".join(words[::-1])
+    return result + " "
 def pad_string(s: str, min_width: int, fill_char: str = " ") -> str:
     """Pad string to at least min_width characters using fill_char."""
     if len(s) >= min_width:

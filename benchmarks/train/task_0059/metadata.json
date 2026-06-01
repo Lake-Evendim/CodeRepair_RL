@@ -2,12 +2,12 @@
   "task_id": "task_0059",
   "repo_type": "validators",
   "bug_type": "boundary",
-  "bug_description": "rejects URLs with port numbers",
+  "bug_description": "rejects URLs with query parameters",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    if \":\" in rest.split(\"/\")[0]:\n        return False\n    return len(rest) > 0 and \"/\" in rest",
-    "new_text": "    return len(rest) > 0 and \"/\" in rest"
+    "old_text": "    if \"?\" in url:\n        return False\n    if url.startswith(\"https://\"):",
+    "new_text": "    if url.startswith(\"https://\"):"
   },
   "split": "train",
-  "variant_id": "val_url_b05"
+  "variant_id": "val_url_b03"
 }

@@ -18,9 +18,9 @@ class TestTruncateString:
 
 
 
-    def test_trunc_keep_tabs(self):
-        result = truncate_string("a	b", 3)
-        assert "	" in result
+    def test_trunc_no_upper(self):
+        result = truncate_string("hello", 5)
+        assert result == "hello"
 class TestCountSubstring:
     def test_basic_count(self):
         assert count_substring("hello world", "o") == 2

@@ -7,12 +7,9 @@ def validate_email(email: str) -> bool:
     """Validate email."""
     if not email:
         return False
-    parts = email.split("@")
-    if len(parts) != 2:
+    if "@" not in email:
         return False
-    local, domain = parts
-    if not local or not domain:
-        return False
+    domain = email.split("@")[1]
     if "." not in domain:
         return False
     return True

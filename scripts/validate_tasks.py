@@ -141,6 +141,58 @@ def validate_task(task_dir: Path, split: str | None = None) -> tuple[bool, str]:
     return True, f"{task_id}: OK"
 
 
+def check_cross_split_constraints(task_dirs: list[Path]) -> list[str]:
+    """Check global constraints across all tasks.
+
+    Returns list of error messages (empty = all good).
+    Checks:
+    1. task_id uniqueness across all splits
+    2. gold_patch pair (old_text, new_text) not duplicated across splits
+    """
+    errors: list[str] = []
+
+    # Collect task_id -> split mapping
+    task_id_map: dict[str, str] = {}
+    # Collect (old_text, new_text) -> list of (task_id, split)
+    patch_map: dict[tuple[str, str], list[tuple[str, str]]] = {}
+
+    for task_dir in task_dirs:
+        metadata_path = task_dir / "metadata.json"
+        if not metadata_path.exists():
+            continue
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        task_id = metadata.get("task_id", task_dir.name)
+        split = metadata.get("split", "unknown")
+        gold_patch = metadata.get("gold_patch", {})
+        patch_key = (gold_patch.get("old_text", ""), gold_patch.get("new_text", ""))
+
+        # Check task_id uniqueness
+        if task_id in task_id_map:
+            errors.append(
+                f"HARD LEAKAGE: task_id '{task_id}' appears in both "
+                f"'{task_id_map[task_id]}' and '{split}' splits"
+            )
+        else:
+            task_id_map[task_id] = split
+
+        # Collect gold_patch pairs per split
+        if patch_key not in patch_map:
+            patch_map[patch_key] = []
+        patch_map[patch_key].append((task_id, split))
+
+    # Check gold_patch pair cross-split overlap
+    for patch_key, occurrences in patch_map.items():
+        splits_involved = set(s for _, s in occurrences)
+        if len(splits_involved) > 1:
+            task_ids = [tid for tid, _ in occurrences]
+            errors.append(
+                f"HARD LEAKAGE: gold_patch pair duplicated across splits: "
+                f"tasks {task_ids} in splits {sorted(splits_involved)}"
+            )
+
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate benchmark tasks")
     parser.add_argument(
@@ -183,6 +235,17 @@ def main() -> int:
             failed += 1
             errors.append(msg)
             print(f"  FAIL  {msg}")
+
+    # Cross-split constraint checks
+    print(f"\n{'='*60}")
+    print("Cross-split constraint checks...")
+    cross_split_errors = check_cross_split_constraints(task_dirs)
+    if cross_split_errors:
+        for err in cross_split_errors:
+            print(f"  FAIL  {err}")
+            errors.append(err)
+    else:
+        print("  PASS  No cross-split leakage detected")
 
     print(f"\n{'='*60}")
     print(f"Results: {passed} passed, {failed} failed, {len(task_dirs)} total")

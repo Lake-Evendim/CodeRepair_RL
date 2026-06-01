@@ -30,10 +30,10 @@ def reverse_words(s: str) -> str:
 
 def pad_string(s: str, min_width: int, fill_char: str = " ") -> str:
     """Pad string."""
+    s = " ".join(s.split())
     if len(s) >= min_width:
         return s
-    fc = fill_char[0] if fill_char else " "
-    padding = fc * (min_width - len(s))
+    padding = fill_char * (min_width - len(s))
     return s + padding
 def capitalize_words(s: str) -> str:
     """Capitalize the first letter of each word, lowercase the rest."""

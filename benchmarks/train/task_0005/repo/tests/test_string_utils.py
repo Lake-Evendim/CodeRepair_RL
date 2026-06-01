@@ -29,8 +29,8 @@ class TestCountSubstring:
 
 
 
-    def test_count_plus_one(self):
-        assert count_substring("hello world", "o") == 2
+    def test_count_end_boundary(self):
+        assert count_substring("abcabc", "abc") == 2
 class TestReverseWords:
     def test_basic_reverse(self):
         assert reverse_words("hello world") == "world hello"

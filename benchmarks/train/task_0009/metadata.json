@@ -2,12 +2,12 @@
   "task_id": "task_0009",
   "repo_type": "string_utils",
   "bug_type": "boundary",
-  "bug_description": "adds one extra padding character",
+  "bug_description": "pads on the left instead of right",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    padding = fill_char * (min_width - len(s) + 1)",
-    "new_text": "    padding = fill_char * (min_width - len(s))"
+    "old_text": "    return padding + s",
+    "new_text": "    return s + padding"
   },
   "split": "train",
-  "variant_id": "su_pad_b04"
+  "variant_id": "su_pad_b02"
 }

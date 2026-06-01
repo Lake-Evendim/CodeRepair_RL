@@ -55,6 +55,5 @@ class TestCapitalizeWords:
         assert capitalize_words("") == ""
 
 
-    def test_cap_not_title(self):
-        result = capitalize_words("it's a test")
-        assert result == "It's A Test"
+    def test_cap_lower_rest(self):
+        assert capitalize_words("hELLo") == "Hello"

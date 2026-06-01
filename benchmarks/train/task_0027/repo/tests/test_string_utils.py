@@ -29,8 +29,8 @@ class TestCountSubstring:
 
 
 
-    def test_count_no_partial_lower(self):
-        assert count_substring("HELLO", "HELLO") == 1
+    def test_count_s04(self):
+        assert count_substring("AaAa", "a") == 2
 class TestReverseWords:
     def test_basic_reverse(self):
         assert reverse_words("hello world") == "world hello"

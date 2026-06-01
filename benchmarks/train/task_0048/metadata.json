@@ -2,12 +2,12 @@
   "task_id": "task_0048",
   "repo_type": "validators",
   "bug_type": "boundary",
-  "bug_description": "rejects emails with digits in local part",
+  "bug_description": "minimal validation, accepts many invalid formats",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    if any(c.isdigit() for c in local):\n        return False\n    if not local or not domain:",
-    "new_text": "    if not local or not domain:"
+    "old_text": "    return \"@\" in email and \".\" in email",
+    "new_text": "    if not email or \"..\" in email:\n        return False\n    parts = email.split(\"@\")\n    if len(parts) != 2:\n        return False\n    local, domain = parts\n    if not local or not domain:\n        return False\n    if \".\" not in domain:\n        return False\n    if domain.startswith(\".\") or domain.endswith(\".\"):\n        return False\n    return True"
   },
   "split": "train",
-  "variant_id": "val_eml_b07"
+  "variant_id": "val_eml_b06"
 }

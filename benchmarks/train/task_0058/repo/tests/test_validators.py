@@ -42,8 +42,8 @@ class TestValidateUrl:
 
 
 
-    def test_url_allow_fragment(self):
-        assert validate_url("https://example.com/path#section") is True
+    def test_url_need_path(self):
+        assert validate_url("https://example.com") is False
 class TestValidateDateFormat:
     def test_valid_date(self):
         assert validate_date_format("2024-01-15") is True

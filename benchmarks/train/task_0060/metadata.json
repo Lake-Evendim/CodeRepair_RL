@@ -2,12 +2,12 @@
   "task_id": "task_0060",
   "repo_type": "validators",
   "bug_type": "boundary",
-  "bug_description": "also accepts ftp:// protocol",
+  "bug_description": "rejects URLs with IP addresses",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    for prefix in (\"https://\", \"http://\", \"ftp://\"):",
-    "new_text": "    for prefix in (\"https://\", \"http://\"):"
+    "old_text": "    host = rest.split(\"/\")[0]\n    if host.replace(\".\", \"\").isdigit():\n        return False\n    return len(rest) > 0 and \"/\" in rest",
+    "new_text": "    return len(rest) > 0 and \"/\" in rest"
   },
   "split": "train",
-  "variant_id": "val_url_b02"
+  "variant_id": "val_url_b06"
 }

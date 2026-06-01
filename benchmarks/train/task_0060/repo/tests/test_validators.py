@@ -42,8 +42,8 @@ class TestValidateUrl:
 
 
 
-    def test_url_no_ftp(self):
-        assert validate_url("ftp://example.com/path") is False
+    def test_url_allow_ip(self):
+        assert validate_url("http://192.168.1.1/api") is True
 class TestValidateDateFormat:
     def test_valid_date(self):
         assert validate_date_format("2024-01-15") is True

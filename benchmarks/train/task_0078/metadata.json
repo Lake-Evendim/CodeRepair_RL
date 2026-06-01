@@ -2,12 +2,12 @@
   "task_id": "task_0078",
   "repo_type": "validators",
   "bug_type": "string_validation",
-  "bug_description": "also accepts ftp:// protocol",
+  "bug_description": "lowercases URL before validation",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    for prefix in (\"https://\", \"http://\", \"ftp://\"):",
-    "new_text": "    for prefix in (\"https://\", \"http://\"):"
+    "old_text": "    url = url.lower()\n    if not url:",
+    "new_text": "    if not url:"
   },
   "split": "train",
-  "variant_id": "val_url_s03"
+  "variant_id": "val_url_s07"
 }

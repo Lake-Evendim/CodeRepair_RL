@@ -2,12 +2,12 @@
   "task_id": "task_0022",
   "repo_type": "string_utils",
   "bug_type": "string_validation",
-  "bug_description": "uses .title() which capitalizes after apostrophes incorrectly",
+  "bug_description": "does not lowercase the rest of the word",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    return s.title()",
+    "old_text": "    return \" \".join(w[:1].upper() + w[1:] if w else \"\" for w in s.split(\" \"))",
     "new_text": "    return \" \".join(w[:1].upper() + w[1:].lower() if w else \"\" for w in s.split(\" \"))"
   },
   "split": "train",
-  "variant_id": "su_cap_s01"
+  "variant_id": "su_cap_s02"
 }

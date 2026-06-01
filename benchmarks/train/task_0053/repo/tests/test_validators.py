@@ -26,8 +26,8 @@ class TestValidatePhone:
 
 
 
-    def test_phone_allow_leading_zero(self):
-        assert validate_phone("0123456789") is True
+    def test_phone_last_digit(self):
+        assert validate_phone("123456789x") is False
 class TestValidatePasswordStrength:
     def test_strong_password(self):
         assert validate_password_strength("Abc12345!") is True

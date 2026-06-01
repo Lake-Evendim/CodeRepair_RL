@@ -2,12 +2,12 @@
   "task_id": "task_0003",
   "repo_type": "string_utils",
   "bug_type": "boundary",
-  "bug_description": "returns single space for empty string",
+  "bug_description": "uses .upper() on rest instead of .lower()",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    if not s:\n        return \" \"\n    return \" \".join(",
-    "new_text": "    return \" \".join("
+    "old_text": "    return \" \".join(w[:1].upper() + w[1:].upper() if w else \"\" for w in s.split(\" \"))",
+    "new_text": "    return \" \".join(w[:1].upper() + w[1:].lower() if w else \"\" for w in s.split(\" \"))"
   },
   "split": "train",
-  "variant_id": "su_cap_b05"
+  "variant_id": "su_cap_b01"
 }

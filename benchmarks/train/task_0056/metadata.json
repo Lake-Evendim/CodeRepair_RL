@@ -2,12 +2,12 @@
   "task_id": "task_0056",
   "repo_type": "validators",
   "bug_type": "boundary",
-  "bug_description": "allows last character to be non-digit",
+  "bug_description": "allows numbers longer than 15 digits",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    return len(cleaned) >= 10 and cleaned[:-1].isdigit()",
+    "old_text": "    return cleaned.isdigit() and len(cleaned) >= 10",
     "new_text": "    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
   },
   "split": "train",
-  "variant_id": "val_phn_b03"
+  "variant_id": "val_phn_b02"
 }

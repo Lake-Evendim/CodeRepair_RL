@@ -18,9 +18,9 @@ class TestTruncateString:
 
 
 
-    def test_trunc_no_lower(self):
-        result = truncate_string("HELLO", 5)
-        assert result == "HELLO"
+    def test_trunc_preserve_spaces(self):
+        result = truncate_string("hello  world", 12)
+        assert result == "hello  world"
 class TestCountSubstring:
     def test_basic_count(self):
         assert count_substring("hello world", "o") == 2

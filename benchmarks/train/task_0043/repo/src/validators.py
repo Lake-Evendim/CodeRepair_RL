@@ -56,12 +56,11 @@ def validate_date_format(date_str: str) -> bool:
     """Validate date format."""
     from datetime import datetime as _dt
 
-    if not re.match(r"^\d{4}-\d{2}-\d{2}$", date_str):
+    normalized = date_str.replace("/", "-")
+    if not re.match(r"^\d{4}-\d{2}-\d{2}$", normalized):
         return False
     try:
-        dt = _dt.strptime(date_str, "%Y-%m-%d")
-        if dt.year < 2000:
-            return False
+        _dt.strptime(normalized, "%Y-%m-%d")
         return True
     except ValueError:
         return False

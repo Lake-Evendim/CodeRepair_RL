@@ -29,12 +29,13 @@ def validate_phone(phone: str) -> bool:
 
 
 def validate_password_strength(password: str) -> bool:
-    """Validate password."""
+    """Validate password: reject common words."""
     if len(password) < 8:
         return False
-    lower_pwd = password.lower()
-    if "password" in lower_pwd or "123456" in lower_pwd:
-        return False
+    lower = password.lower()
+    for word in ("password", "123456", "qwerty", "abc123"):
+        if word in lower:
+            return False
     has_upper = any(c.isupper() for c in password)
     has_lower = any(c.islower() for c in password)
     has_digit = any(c.isdigit() for c in password)

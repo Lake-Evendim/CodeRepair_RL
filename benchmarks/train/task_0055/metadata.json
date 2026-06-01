@@ -2,12 +2,12 @@
   "task_id": "task_0055",
   "repo_type": "validators",
   "bug_type": "boundary",
-  "bug_description": "allows 9-digit numbers (should be min 10)",
+  "bug_description": "does not handle leading + prefix",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    return cleaned.isdigit() and 9 <= len(cleaned) <= 15",
-    "new_text": "    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
+    "old_text": "    cleaned = phone.replace(\"-\", \"\").replace(\" \", \"\")\n    return cleaned.isdigit() and 10 <= len(cleaned) <= 15",
+    "new_text": "    cleaned = phone.replace(\"-\", \"\").replace(\" \", \"\")\n    if cleaned.startswith(\"+\"):\n        cleaned = cleaned[1:]\n    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
   },
   "split": "train",
-  "variant_id": "val_phn_b05"
+  "variant_id": "val_phn_b04"
 }

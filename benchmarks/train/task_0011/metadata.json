@@ -2,12 +2,12 @@
   "task_id": "task_0011",
   "repo_type": "string_utils",
   "bug_type": "boundary",
-  "bug_description": "adds one fewer padding character",
+  "bug_description": "appends one extra fill_char after padding",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    padding = fill_char * (min_width - len(s) - 1)",
-    "new_text": "    padding = fill_char * (min_width - len(s))"
+    "old_text": "    return s + padding + fill_char",
+    "new_text": "    return s + padding"
   },
   "split": "train",
-  "variant_id": "su_pad_b05"
+  "variant_id": "su_pad_b07"
 }

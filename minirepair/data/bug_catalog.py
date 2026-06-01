@@ -573,12 +573,17 @@ def get_all_variants() -> list[BugVariant]:
             buggy_code='''def reverse_words(s: str) -> str:
     """Reverse word order."""
     words = s.split()
-    return " ".join(reversed(words))''',
-            fix_old='''    return " ".join(reversed(words))''',
-            fix_new='''    return " ".join(words[::-1])''',
-            description="uses reversed() iterator (same result but different approach)",
-            test_name="test_reverse_iterator",
-            test_code='''    def test_reverse_iterator(self):
+    result = " ".join(words[::-1])
+    if result and result[0].islower():
+        result = result[0].upper() + result[1:]
+    return result''',
+            fix_old='''    if result and result[0].islower():
+        result = result[0].upper() + result[1:]
+    return result''',
+            fix_new='''    return result''',
+            description="capitalizes first character of result",
+            test_name="test_reverse_no_capitalize",
+            test_code='''    def test_reverse_no_capitalize(self):
         assert reverse_words("hello world") == "world hello"''',
         ),
         BugVariant(
@@ -2891,5 +2896,378 @@ def get_all_variants() -> list[BugVariant]:
             test_name="test_date_sv_future",
             test_code='''    def test_date_sv_future(self):
         assert validate_date_format("2099-12-31") is True''',
+        ),
+        # --- Additional unique variants to reach 130+ after gold_patch dedup ---
+        BugVariant(
+            variant_id="val_dat_s08", repo_type="validators",
+            function_name="validate_date_format", bug_type="string_validation",
+            buggy_code='''def validate_date_format(date_str: str) -> bool:
+    """Validate date format."""
+    from datetime import datetime as _dt
+
+    if not re.match(r"^\\d{4}[-/]\\d{2}[-/]\\d{2}$", date_str):
+        return False
+    try:
+        _dt.strptime(date_str.replace("/", "-"), "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False''',
+            fix_old='''    if not re.match(r"^\\d{4}[-/]\\d{2}[-/]\\d{2}$", date_str):
+        return False
+    try:
+        _dt.strptime(date_str.replace("/", "-"), "%Y-%m-%d")''',
+            fix_new='''    if not re.match(r"^\\d{4}-\\d{2}-\\d{2}$", date_str):
+        return False
+    try:
+        _dt.strptime(date_str, "%Y-%m-%d")''',
+            description="accepts slash separators in date format",
+            test_name="test_date_sv_slash_rejected",
+            test_code='''    def test_date_sv_slash_rejected(self):
+        assert validate_date_format("2024/01/15") is False''',
+        ),
+        BugVariant(
+            variant_id="val_dat_s09", repo_type="validators",
+            function_name="validate_date_format", bug_type="string_validation",
+            buggy_code='''def validate_date_format(date_str: str) -> bool:
+    """Validate date format."""
+    from datetime import datetime as _dt
+
+    if not re.match(r"^\\d{4}-\\d{2}-\\d{2}$", date_str):
+        return False
+    try:
+        dt = _dt.strptime(date_str, "%Y-%m-%d")
+        if dt.year > 2030:
+            return False
+        return True
+    except ValueError:
+        return False''',
+            fix_old='''        if dt.year > 2030:
+            return False
+        return True''',
+            fix_new='''        return True''',
+            description="rejects dates after year 2030",
+            test_name="test_date_sv_no_upper_year",
+            test_code='''    def test_date_sv_no_upper_year(self):
+        assert validate_date_format("2099-12-31") is True''',
+        ),
+        BugVariant(
+            variant_id="val_dat_s10", repo_type="validators",
+            function_name="validate_date_format", bug_type="string_validation",
+            buggy_code='''def validate_date_format(date_str: str) -> bool:
+    """Validate date format."""
+    from datetime import datetime as _dt
+
+    if not re.match(r"^\\d{4}-\\d{2}-\\d{2}$", date_str):
+        return False
+    try:
+        _dt.strptime(date_str, "%Y-%m-%d")
+        if int(date_str[:4]) < 1900:
+            return False
+        return True
+    except ValueError:
+        return False''',
+            fix_old='''        if int(date_str[:4]) < 1900:
+            return False
+        return True''',
+            fix_new='''        return True''',
+            description="rejects dates before year 1900",
+            test_name="test_date_sv_no_year_limit",
+            test_code='''    def test_date_sv_no_year_limit(self):
+        assert validate_date_format("1800-01-01") is True''',
+        ),
+        BugVariant(
+            variant_id="val_phn_s08", repo_type="validators",
+            function_name="validate_phone", bug_type="string_validation",
+            buggy_code='''def validate_phone(phone: str) -> bool:
+    """Validate phone."""
+    cleaned = phone.replace("-", "").replace(" ", "")
+    if cleaned.startswith("+"):
+        cleaned = cleaned[1:]
+    return cleaned.isdigit() and 10 <= len(cleaned) <= 12''',
+            fix_old='''    return cleaned.isdigit() and 10 <= len(cleaned) <= 12''',
+            fix_new='''    return cleaned.isdigit() and 10 <= len(cleaned) <= 15''',
+            description="upper bound is 12 instead of 15",
+            test_name="test_phone_sv_upper_15",
+            test_code='''    def test_phone_sv_upper_15(self):
+        assert validate_phone("1234567890123") is True''',
+        ),
+        BugVariant(
+            variant_id="val_phn_s09", repo_type="validators",
+            function_name="validate_phone", bug_type="string_validation",
+            buggy_code='''def validate_phone(phone: str) -> bool:
+    """Validate phone."""
+    cleaned = phone.replace("-", "").replace(" ", "")
+    if cleaned.startswith("+"):
+        cleaned = cleaned[1:]
+    if cleaned.startswith("1"):
+        return cleaned.isdigit() and 10 <= len(cleaned) <= 15
+    return False''',
+            fix_old='''    if cleaned.startswith("1"):
+        return cleaned.isdigit() and 10 <= len(cleaned) <= 15
+    return False''',
+            fix_new='''    return cleaned.isdigit() and 10 <= len(cleaned) <= 15''',
+            description="only accepts numbers starting with 1",
+            test_name="test_phone_sv_any_prefix",
+            test_code='''    def test_phone_sv_any_prefix(self):
+        assert validate_phone("8123456789") is True''',
+        ),
+        BugVariant(
+            variant_id="val_url_s08", repo_type="validators",
+            function_name="validate_url", bug_type="string_validation",
+            buggy_code='''def validate_url(url: str) -> bool:
+    """Validate URL."""
+    if not url:
+        return False
+    if url.startswith("https://"):
+        rest = url[8:]
+    elif url.startswith("http://"):
+        rest = url[7:]
+    else:
+        return False
+    return "/" in rest and len(rest) > 3''',
+            fix_old='''    return "/" in rest and len(rest) > 3''',
+            fix_new='''    return len(rest) > 0 and "/" in rest''',
+            description="requires rest length > 3 instead of > 0",
+            test_name="test_url_sv_short_path",
+            test_code='''    def test_url_sv_short_path(self):
+        assert validate_url("http://x/1") is True''',
+        ),
+        BugVariant(
+            variant_id="val_url_s09", repo_type="validators",
+            function_name="validate_url", bug_type="string_validation",
+            buggy_code='''def validate_url(url: str) -> bool:
+    """Validate URL."""
+    if not url:
+        return False
+    if url.startswith("https://"):
+        rest = url[8:]
+    elif url.startswith("http://"):
+        rest = url[7:]
+    else:
+        return False
+    return len(rest) > 0 and "/" in rest and "." in rest''',
+            fix_old='''    return len(rest) > 0 and "/" in rest and "." in rest''',
+            fix_new='''    return len(rest) > 0 and "/" in rest''',
+            description="requires dot in rest (rejects localhost URLs)",
+            test_name="test_url_sv_no_dot_requirement",
+            test_code='''    def test_url_sv_no_dot_requirement(self):
+        assert validate_url("http://localhost/api") is True''',
+        ),
+        BugVariant(
+            variant_id="val_eml_s08", repo_type="validators",
+            function_name="validate_email", bug_type="string_validation",
+            buggy_code='''def validate_email(email: str) -> bool:
+    """Validate email."""
+    if not email or ".." in email:
+        return False
+    parts = email.split("@")
+    if len(parts) != 2:
+        return False
+    local, domain = parts
+    if not local or not domain:
+        return False
+    if "." not in domain:
+        return False
+    if domain.startswith(".") or domain.endswith("."):
+        return False
+    if len(local) > 64:
+        return False
+    return True''',
+            fix_old='''    if len(local) > 64:
+        return False
+    return True''',
+            fix_new='''    return True''',
+            description="rejects local parts longer than 64 chars",
+            test_name="test_email_sv_no_local_limit",
+            test_code='''    def test_email_sv_no_local_limit(self):
+        long_local = "a" * 65
+        assert validate_email(f"{long_local}@example.com") is True''',
+        ),
+        BugVariant(
+            variant_id="val_pwd_s08", repo_type="validators",
+            function_name="validate_password_strength", bug_type="string_validation",
+            buggy_code='''def validate_password_strength(password: str) -> bool:
+    """Validate password."""
+    if len(password) < 8:
+        return False
+    has_upper = any(c.isupper() for c in password)
+    has_lower = any(c.islower() for c in password)
+    has_digit = any(c.isdigit() for c in password)
+    has_special = any(not c.isalnum() for c in password)
+    if " " in password:
+        return False
+    return has_upper and has_lower and has_digit and has_special''',
+            fix_old='''    if " " in password:
+        return False
+    return has_upper and has_lower and has_digit and has_special''',
+            fix_new='''    return has_upper and has_lower and has_digit and has_special''',
+            description="rejects passwords containing spaces",
+            test_name="test_pwd_sv_allow_spaces",
+            test_code='''    def test_pwd_sv_allow_spaces(self):
+        assert validate_password_strength("Abc 1234!") is True''',
+        ),
+        BugVariant(
+            variant_id="su_rev_b08", repo_type="string_utils",
+            function_name="reverse_words", bug_type="boundary",
+            buggy_code='''def reverse_words(s: str) -> str:
+    """Reverse word order."""
+    words = s.split()
+    if not words:
+        return s
+    return " ".join(words[::-1])''',
+            fix_old='''    if not words:
+        return s
+    return " ".join(words[::-1])''',
+            fix_new='''    return " ".join(words[::-1])''',
+            description="returns original string for empty split (preserves whitespace-only input)",
+            test_name="test_reverse_b08_ws_only",
+            test_code='''    def test_reverse_b08_ws_only(self):
+        assert reverse_words("   ") == ""''',
+        ),
+        BugVariant(
+            variant_id="su_cap_b08", repo_type="string_utils",
+            function_name="capitalize_words", bug_type="boundary",
+            buggy_code='''def capitalize_words(s: str) -> str:
+    """Capitalize words."""
+    return "-".join(w[:1].upper() + w[1:].lower() if w else "" for w in s.split(" "))''',
+            fix_old='''    return "-".join(w[:1].upper() + w[1:].lower() if w else "" for w in s.split(" "))''',
+            fix_new='''    return " ".join(w[:1].upper() + w[1:].lower() if w else "" for w in s.split(" "))''',
+            description="joins words with hyphen instead of space",
+            test_name="test_cap_b08_space_join",
+            test_code='''    def test_cap_b08_space_join(self):
+        result = capitalize_words("hello world")
+        assert result == "Hello World"
+        assert "-" not in result''',
+        ),
+        # --- 6 more unique variants to fill size-6 combos to 7 ---
+        BugVariant(
+            variant_id="su_rev_s08", repo_type="string_utils",
+            function_name="reverse_words", bug_type="string_validation",
+            buggy_code='''def reverse_words(s: str) -> str:
+    """Reverse word order."""
+    words = s.split()
+    return " ".join(words[-1:] + words[:-1])''',
+            fix_old='''    return " ".join(words[-1:] + words[:-1])''',
+            fix_new='''    return " ".join(words[::-1])''',
+            description="rotates words right by one instead of reversing",
+            test_name="test_reverse_sv_s08_rotate",
+            test_code='''    def test_reverse_sv_s08_rotate(self):
+        assert reverse_words("a b c") == "c b a"''',
+        ),
+        BugVariant(
+            variant_id="val_dat_b08", repo_type="validators",
+            function_name="validate_date_format", bug_type="boundary",
+            buggy_code='''def validate_date_format(date_str: str) -> bool:
+    """Validate date format."""
+    from datetime import datetime as _dt
+
+    if not re.match(r"^\\d{4}-\\d{2}-\\d{2}$", date_str):
+        return False
+    try:
+        _dt.strptime(date_str, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return len(date_str) == 10''',
+            fix_old='''    except ValueError:
+        return len(date_str) == 10''',
+            fix_new='''    except ValueError:
+        return False''',
+            description="returns True for invalid dates that match length",
+            test_name="test_date_b08_invalid_by_length",
+            test_code='''    def test_date_b08_invalid_by_length(self):
+        assert validate_date_format("2024-13-01") is False''',
+        ),
+        BugVariant(
+            variant_id="val_eml_s09", repo_type="validators",
+            function_name="validate_email", bug_type="string_validation",
+            buggy_code='''def validate_email(email: str) -> bool:
+    """Validate email."""
+    if not email or ".." in email:
+        return False
+    parts = email.split("@")
+    if len(parts) != 2:
+        return False
+    local, domain = parts
+    if not local or not domain:
+        return False
+    if "." not in domain:
+        return False
+    if domain.startswith(".") or domain.endswith("."):
+        return False
+    if local.startswith(".") or local.endswith("."):
+        return False
+    return True''',
+            fix_old='''    if local.startswith(".") or local.endswith("."):
+        return False
+    return True''',
+            fix_new='''    return True''',
+            description="rejects local parts starting or ending with dot",
+            test_name="test_email_sv_allow_local_dots",
+            test_code='''    def test_email_sv_allow_local_dots(self):
+        assert validate_email(".user@example.com") is True''',
+        ),
+        BugVariant(
+            variant_id="val_pwd_s09", repo_type="validators",
+            function_name="validate_password_strength", bug_type="string_validation",
+            buggy_code='''def validate_password_strength(password: str) -> bool:
+    """Validate password."""
+    if len(password) < 8:
+        return False
+    has_upper = any(c.isupper() for c in password)
+    has_lower = any(c.islower() for c in password)
+    has_digit = any(c.isdigit() for c in password)
+    has_special = any(not c.isalnum() for c in password)
+    if password != password.strip():
+        return False
+    return has_upper and has_lower and has_digit and has_special''',
+            fix_old='''    if password != password.strip():
+        return False
+    return has_upper and has_lower and has_digit and has_special''',
+            fix_new='''    return has_upper and has_lower and has_digit and has_special''',
+            description="rejects passwords with leading/trailing whitespace",
+            test_name="test_pwd_sv_allow_whitespace",
+            test_code='''    def test_pwd_sv_allow_whitespace(self):
+        assert validate_password_strength(" Abc1234!") is True''',
+        ),
+        BugVariant(
+            variant_id="val_phn_s10", repo_type="validators",
+            function_name="validate_phone", bug_type="string_validation",
+            buggy_code='''def validate_phone(phone: str) -> bool:
+    """Validate phone."""
+    cleaned = phone.replace("-", "").replace(" ", "")
+    if cleaned.startswith("+"):
+        cleaned = cleaned[1:]
+    if cleaned.startswith("00"):
+        return False
+    return cleaned.isdigit() and 10 <= len(cleaned) <= 15''',
+            fix_old='''    if cleaned.startswith("00"):
+        return False
+    return cleaned.isdigit() and 10 <= len(cleaned) <= 15''',
+            fix_new='''    return cleaned.isdigit() and 10 <= len(cleaned) <= 15''',
+            description="rejects numbers starting with 00",
+            test_name="test_phone_sv_allow_double_zero",
+            test_code='''    def test_phone_sv_allow_double_zero(self):
+        assert validate_phone("0012345678") is True''',
+        ),
+        BugVariant(
+            variant_id="val_url_s10", repo_type="validators",
+            function_name="validate_url", bug_type="string_validation",
+            buggy_code='''def validate_url(url: str) -> bool:
+    """Validate URL."""
+    if not url:
+        return False
+    if url.startswith("https://"):
+        rest = url[8:]
+    elif url.startswith("http://"):
+        rest = url[7:]
+    else:
+        return False
+    return len(rest) > 0 and "/" in rest and not rest.startswith("/")''',
+            fix_old='''    return len(rest) > 0 and "/" in rest and not rest.startswith("/")''',
+            fix_new='''    return len(rest) > 0 and "/" in rest''',
+            description="rejects URLs where path starts immediately after protocol",
+            test_name="test_url_sv_allow_triple_slash",
+            test_code='''    def test_url_sv_allow_triple_slash(self):
+        assert validate_url("http:///path") is True''',
         ),
     ]

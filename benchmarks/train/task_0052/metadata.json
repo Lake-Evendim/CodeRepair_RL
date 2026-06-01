@@ -2,12 +2,12 @@
   "task_id": "task_0052",
   "repo_type": "validators",
   "bug_type": "boundary",
-  "bug_description": "requires only 6 chars instead of 8",
+  "bug_description": "rejects passwords with 3+ consecutive same characters",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    if len(password) < 6:",
-    "new_text": "    if len(password) < 8:"
+    "old_text": "    for i in range(len(password) - 2):\n        if password[i] == password[i+1] == password[i+2]:\n            return False\n    has_upper",
+    "new_text": "    has_upper"
   },
   "split": "train",
-  "variant_id": "val_pwd_b02"
+  "variant_id": "val_pwd_b06"
 }

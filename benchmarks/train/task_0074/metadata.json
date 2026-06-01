@@ -2,12 +2,12 @@
   "task_id": "task_0074",
   "repo_type": "validators",
   "bug_type": "string_validation",
-  "bug_description": "does not verify all characters are digits",
+  "bug_description": "rejects phone numbers with all same digits",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "    return len(cleaned) >= 10",
+    "old_text": "    if len(set(cleaned)) == 1:\n        return False\n    return cleaned.isdigit() and 10 <= len(cleaned) <= 15",
     "new_text": "    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
   },
   "split": "train",
-  "variant_id": "val_phn_s01"
+  "variant_id": "val_phn_s05"
 }

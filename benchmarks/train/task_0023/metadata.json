@@ -2,12 +2,12 @@
   "task_id": "task_0023",
   "repo_type": "string_utils",
   "bug_type": "string_validation",
-  "bug_description": "removes punctuation before capitalizing",
+  "bug_description": "reverses word order before capitalizing",
   "gold_patch": {
     "file_path": "src/string_utils.py",
-    "old_text": "    import string\n    s = s.translate(str.maketrans(\"\", \"\", string.punctuation))\n    return \" \".join(",
-    "new_text": "    return \" \".join("
+    "old_text": "    return \" \".join(w[:1].upper() + w[1:].lower() if w else \"\" for w in s.split(\" \")[::-1])",
+    "new_text": "    return \" \".join(w[:1].upper() + w[1:].lower() if w else \"\" for w in s.split(\" \"))"
   },
   "split": "train",
-  "variant_id": "su_cap_s04"
+  "variant_id": "su_cap_s07"
 }

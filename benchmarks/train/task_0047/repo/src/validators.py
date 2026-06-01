@@ -7,16 +7,14 @@ def validate_email(email: str) -> bool:
     """Validate email."""
     if not email:
         return False
-    email = email.replace(" ", "")
-    parts = email.split("@")
-    if len(parts) != 2:
+    if "@" not in email:
         return False
-    local, domain = parts
+    local, domain = email.split("@", 1)
     if not local or not domain:
         return False
     if "." not in domain:
         return False
-    if domain.startswith(".") or domain.endswith("."):
+    if domain.startswith("."):
         return False
     return True
 def validate_phone(phone: str) -> bool:

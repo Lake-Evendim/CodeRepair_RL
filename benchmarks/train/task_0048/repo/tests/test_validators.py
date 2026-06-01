@@ -18,8 +18,9 @@ class TestValidateEmail:
 
 
 
-    def test_email_b07_allow_digits(self):
-        assert validate_email("user123@example.com") is True
+    def test_email_minimal(self):
+        assert validate_email("@.") is False
+        assert validate_email("user@") is False
 class TestValidatePhone:
     def test_valid_10_digits(self):
         assert validate_phone("1234567890") is True

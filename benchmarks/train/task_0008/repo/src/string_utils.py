@@ -12,9 +12,9 @@ def count_substring(s: str, sub: str) -> int:
     """Count occurrences."""
     if not sub:
         return 0
-    count = 0
+    count = 1
     start = 0
-    while start < len(s) - len(sub):
+    while True:
         idx = s.find(sub, start)
         if idx == -1:
             break

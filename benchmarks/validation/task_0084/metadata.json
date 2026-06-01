@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0084",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "returns single space for empty string instead of empty string",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    if not words:\n        return \" \"\n    return \" \".join(words[::-1])",
+    "new_text": "    return \" \".join(words[::-1])"
+  },
+  "split": "validation",
+  "variant_id": "su_rev_b03"
+}

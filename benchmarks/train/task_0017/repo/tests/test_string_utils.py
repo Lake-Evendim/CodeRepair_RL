@@ -18,9 +18,10 @@ class TestTruncateString:
 
 
 
-    def test_trunc_no_strip(self):
-        result = truncate_string("ab   xyz", 6)
-        assert result == "ab ..."
+    def test_trunc_one_char_short(self):
+        result = truncate_string("abcdefghij", 7)
+        assert len(result) <= 7
+        assert result == "abcd..."
 class TestCountSubstring:
     def test_basic_count(self):
         assert count_substring("hello world", "o") == 2

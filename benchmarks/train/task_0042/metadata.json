@@ -2,12 +2,12 @@
   "task_id": "task_0042",
   "repo_type": "validators",
   "bug_type": "boundary",
-  "bug_description": "rejects dates before year 1900",
+  "bug_description": "only checks regex, not actual date validity",
   "gold_patch": {
     "file_path": "src/validators.py",
-    "old_text": "        if dt.year < 1900:\n            return False\n        return True",
-    "new_text": "        return True"
+    "old_text": "    if not re.match(r\"^\\d{4}-\\d{2}-\\d{2}$\", date_str):\n        return False\n    return True",
+    "new_text": "    if not re.match(r\"^\\d{4}-\\d{2}-\\d{2}$\", date_str):\n        return False\n    from datetime import datetime as _dt\n    try:\n        _dt.strptime(date_str, \"%Y-%m-%d\")\n        return True\n    except ValueError:\n        return False"
   },
   "split": "train",
-  "variant_id": "val_dat_b03"
+  "variant_id": "val_dat_b01"
 }

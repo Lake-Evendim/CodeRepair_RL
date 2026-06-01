@@ -40,16 +40,12 @@ def validate_password_strength(password: str) -> bool:
 
 
 def validate_url(url: str) -> bool:
-    """Validate URL, lowercasing first."""
-    url = url.lower()
+    """Validate URL."""
     if not url:
         return False
-    if url.startswith("https://"):
-        rest = url[8:]
-    elif url.startswith("http://"):
-        rest = url[7:]
-    else:
+    if "://" not in url:
         return False
+    rest = url.split("://", 1)[1]
     return len(rest) > 0 and "/" in rest
 def validate_date_format(date_str: str) -> bool:
     """Validate date string is YYYY-MM-DD and represents a real date."""

@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0125",
+  "repo_type": "string_utils",
+  "bug_type": "string_validation",
+  "bug_description": "takes only first char of fill_char",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    fc = fill_char[0] if fill_char else \" \"\n    padding = fc * (min_width - len(s))",
+    "new_text": "    padding = fill_char * (min_width - len(s))"
+  },
+  "split": "test",
+  "variant_id": "su_pad_s02"
+}

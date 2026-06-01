@@ -29,10 +29,10 @@ def validate_phone(phone: str) -> bool:
 
 
 def validate_password_strength(password: str) -> bool:
-    """Validate password: must start with uppercase."""
+    """Validate password."""
     if len(password) < 8:
         return False
-    if not password[0].isupper():
+    if " " in password:
         return False
     has_upper = any(c.isupper() for c in password)
     has_lower = any(c.islower() for c in password)
