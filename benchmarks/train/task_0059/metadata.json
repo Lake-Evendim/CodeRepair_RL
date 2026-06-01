@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0059",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "rejects URLs with port numbers",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if \":\" in rest.split(\"/\")[0]:\n        return False\n    return len(rest) > 0 and \"/\" in rest",
+    "new_text": "    return len(rest) > 0 and \"/\" in rest"
+  },
+  "split": "train",
+  "variant_id": "val_url_b05"
+}

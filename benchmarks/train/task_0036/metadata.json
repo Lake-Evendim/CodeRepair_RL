@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0036",
+  "repo_type": "string_utils",
+  "bug_type": "string_validation",
+  "bug_description": "uppercases all words during reversal",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    return \" \".join(w.upper() for w in s.split()[::-1])",
+    "new_text": "    return \" \".join(s.split()[::-1])"
+  },
+  "split": "train",
+  "variant_id": "su_rev_s06"
+}

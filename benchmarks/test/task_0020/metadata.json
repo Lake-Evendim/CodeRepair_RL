@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0020",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "accepts any protocol with ://",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if \"://\" not in url:\n        return False\n    rest = url.split(\"://\", 1)[1]\n    return len(rest) > 0 and \"/\" in rest",
+    "new_text": "    if url.startswith(\"https://\"):\n        rest = url[8:]\n    elif url.startswith(\"http://\"):\n        rest = url[7:]\n    else:\n        return False\n    return len(rest) > 0 and \"/\" in rest"
+  },
+  "split": "test",
+  "variant_id": "val_url_s02"
+}

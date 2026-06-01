@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0044",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "rejects dates after year 2100",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "        if dt.year > 2100:\n            return False\n        return True",
+    "new_text": "        return True"
+  },
+  "split": "train",
+  "variant_id": "val_dat_b04"
+}

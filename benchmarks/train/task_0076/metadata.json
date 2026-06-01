@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0076",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "rejects phone numbers starting with 0",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if cleaned.startswith(\"0\"):\n        return False\n    return cleaned.isdigit() and 10 <= len(cleaned) <= 15",
+    "new_text": "    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
+  },
+  "split": "train",
+  "variant_id": "val_phn_s07"
+}

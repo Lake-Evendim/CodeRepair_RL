@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0058",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "rejects URLs with fragments",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if \"#\" in url:\n        return False\n    if url.startswith(\"https://\"):",
+    "new_text": "    if url.startswith(\"https://\"):"
+  },
+  "split": "train",
+  "variant_id": "val_url_b04"
+}

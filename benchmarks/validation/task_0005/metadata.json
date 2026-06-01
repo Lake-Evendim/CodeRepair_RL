@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0005",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "off-by-one: uses s[:max_len] producing string longer than max_len",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    return s[: max_len] + \"...\"",
+    "new_text": "    return s[: max_len - 3] + \"...\""
+  },
+  "split": "validation",
+  "variant_id": "su_trunc_b01"
+}

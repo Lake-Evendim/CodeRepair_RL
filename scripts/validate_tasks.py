@@ -75,7 +75,7 @@ def apply_gold_patch(repo_dir: Path, patch: dict) -> None:
     file_path.write_text(new_content, encoding="utf-8")
 
 
-def validate_task(task_dir: Path) -> tuple[bool, str]:
+def validate_task(task_dir: Path, split: str | None = None) -> tuple[bool, str]:
     """Validate a single task. Returns (success, message)."""
     task_id = task_dir.name
 
@@ -90,10 +90,22 @@ def validate_task(task_dir: Path) -> tuple[bool, str]:
     except Exception as e:
         return False, f"{task_id}: invalid metadata: {e}"
 
-    # 2. Check no tests_hidden/ in seed tasks
+    # Infer split from metadata if not provided
+    if split is None:
+        split = metadata.get("split", "seed")
+
     repo_dir = task_dir / "repo"
-    if (repo_dir / "tests_hidden").exists():
-        return False, f"{task_id}: tests_hidden/ must not exist in seed tasks"
+
+    # 2. Check tests_hidden/ rules by split
+    if split in ("train", "validation", "seed"):
+        if (repo_dir / "tests_hidden").exists():
+            return False, f"{task_id}: tests_hidden/ must not exist in {split} split"
+    elif split == "test":
+        if not (repo_dir / "tests_hidden").exists():
+            return False, f"{task_id}: tests_hidden/ must exist in test split"
+        # Test split must NOT have tests_quality_holdout/
+        if (repo_dir / "tests_quality_holdout").exists():
+            return False, f"{task_id}: tests_quality_holdout/ must not exist in test split"
 
     # 3. Check repo structure
     if not (repo_dir / "src").exists():

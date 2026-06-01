@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0004",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "uses s.split() instead of s.split(' '), collapsing multiple spaces",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    words = s.split()\n    return \" \".join(w[:1].upper() + w[1:].lower() if w else \"\" for w in words)",
+    "new_text": "    return \" \".join(w[:1].upper() + w[1:].lower() if w else \"\" for w in s.split(\" \"))"
+  },
+  "split": "train",
+  "variant_id": "su_cap_b03"
+}

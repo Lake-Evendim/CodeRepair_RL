@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0020",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "also accepts ssh:// protocol",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    for prefix in (\"https://\", \"http://\", \"ssh://\"):",
+    "new_text": "    for prefix in (\"https://\", \"http://\"):"
+  },
+  "split": "validation",
+  "variant_id": "val_url_s04"
+}

@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0073",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "strips all non-digits including parentheses",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    import re\n    cleaned = re.sub(r\"\\D\", \"\", phone)\n    return 10 <= len(cleaned) <= 15",
+    "new_text": "    cleaned = phone.replace(\"-\", \"\").replace(\" \", \"\")\n    if cleaned.startswith(\"+\"):\n        cleaned = cleaned[1:]\n    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
+  },
+  "split": "train",
+  "variant_id": "val_phn_s03"
+}

@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0014",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "missing upper bound check",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if len(cleaned) < 10:\n        return False\n    return cleaned.isdigit()",
+    "new_text": "    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
+  },
+  "split": "validation",
+  "variant_id": "val_phn_b06"
+}

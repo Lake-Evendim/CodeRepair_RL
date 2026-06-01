@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0004",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "returns original string (with spaces) for single word",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    if len(words) <= 1:\n        return s\n    return \" \".join(words[::-1])",
+    "new_text": "    return \" \".join(words[::-1])"
+  },
+  "split": "test",
+  "variant_id": "su_rev_b05"
+}

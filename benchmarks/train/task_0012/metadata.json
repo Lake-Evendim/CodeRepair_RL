@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0012",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "pads on the left instead of right",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    return padding + s",
+    "new_text": "    return s + padding"
+  },
+  "split": "train",
+  "variant_id": "su_pad_b02"
+}

@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0066",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "rejects emails with underscores in local part",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    if \"_\" in local:\n        return False\n    if not local or not domain:",
+    "new_text": "    if not local or not domain:"
+  },
+  "split": "train",
+  "variant_id": "val_eml_s07"
+}

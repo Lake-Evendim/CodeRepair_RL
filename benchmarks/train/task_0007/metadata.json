@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0007",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "starts search at index 1, missing matches at position 0",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    start = 1",
+    "new_text": "    start = 0"
+  },
+  "split": "train",
+  "variant_id": "su_cnt_b03"
+}

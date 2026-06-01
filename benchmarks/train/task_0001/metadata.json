@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0001",
+  "repo_type": "string_utils",
+  "bug_type": "boundary",
+  "bug_description": "only capitalizes first character of string",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    if not s:\n        return s\n    return s[0].upper() + s[1:]",
+    "new_text": "    return \" \".join(w[:1].upper() + w[1:].lower() if w else \"\" for w in s.split(\" \"))"
+  },
+  "split": "train",
+  "variant_id": "su_cap_b02"
+}

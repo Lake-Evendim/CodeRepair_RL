@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0050",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "requires 2+ digits instead of 1",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    return has_upper and has_lower and digits >= 2 and has_special",
+    "new_text": "    has_digit = any(c.isdigit() for c in password)\n    return has_upper and has_lower and has_digit and has_special"
+  },
+  "split": "train",
+  "variant_id": "val_pwd_b05"
+}

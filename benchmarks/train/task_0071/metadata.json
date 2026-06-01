@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0071",
+  "repo_type": "validators",
+  "bug_type": "string_validation",
+  "bug_description": "rejects passwords containing common substrings",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    lower_pwd = password.lower()\n    if \"password\" in lower_pwd or \"123456\" in lower_pwd:\n        return False\n    has_upper",
+    "new_text": "    has_upper"
+  },
+  "split": "train",
+  "variant_id": "val_pwd_s06"
+}

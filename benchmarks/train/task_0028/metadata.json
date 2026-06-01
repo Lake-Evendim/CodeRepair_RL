@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0028",
+  "repo_type": "string_utils",
+  "bug_type": "string_validation",
+  "bug_description": "strips s before counting, losing leading/trailing matches",
+  "gold_patch": {
+    "file_path": "src/string_utils.py",
+    "old_text": "    return s.strip().count(sub)",
+    "new_text": "    return s.count(sub)"
+  },
+  "split": "train",
+  "variant_id": "su_cnt_s03"
+}

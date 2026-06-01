@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0054",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "only checks length >= 10, not digit-only or upper bound",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    return len(cleaned) >= 10",
+    "new_text": "    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
+  },
+  "split": "train",
+  "variant_id": "val_phn_b01"
+}

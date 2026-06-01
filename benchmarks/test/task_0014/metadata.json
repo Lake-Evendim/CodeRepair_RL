@@ -1,0 +1,13 @@
+{
+  "task_id": "task_0014",
+  "repo_type": "validators",
+  "bug_type": "boundary",
+  "bug_description": "does not handle leading + prefix",
+  "gold_patch": {
+    "file_path": "src/validators.py",
+    "old_text": "    cleaned = phone.replace(\"-\", \"\").replace(\" \", \"\")\n    return cleaned.isdigit() and 10 <= len(cleaned) <= 15",
+    "new_text": "    cleaned = phone.replace(\"-\", \"\").replace(\" \", \"\")\n    if cleaned.startswith(\"+\"):\n        cleaned = cleaned[1:]\n    return cleaned.isdigit() and 10 <= len(cleaned) <= 15"
+  },
+  "split": "test",
+  "variant_id": "val_phn_b04"
+}
