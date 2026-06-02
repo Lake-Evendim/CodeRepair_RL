@@ -1,0 +1,30 @@
+# SFT training configuration for MiniRepair-RL
+model_name: Qwen/Qwen2.5-Coder-1.5B-Instruct
+dataset_path: data/sft_train.jsonl
+output_dir: outputs/sft_adapter
+
+# LoRA config
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+
+# Training hyperparameters
+batch_size: 4
+gradient_accumulation_steps: 4
+learning_rate: 2.0e-4
+epochs: 3
+max_seq_length: 1024
+warmup_ratio: 0.1
+weight_decay: 0.01
+logging_steps: 10
+save_strategy: "no"
+
+# Dry-run overrides (used when --dry-run is passed)
+dry_run:
+  max_samples: 8
+  max_steps: 2

@@ -1,0 +1,16 @@
+model_name: Qwen/Qwen2.5-Coder-1.5B-Instruct
+sft_adapter_path: outputs/sft_adapter_trained
+output_dir: outputs/rl_dense_adapter_trained
+reward_mode: dense
+num_epochs: 3
+num_rollouts_per_task: 2
+learning_rate: 1.0e-5
+baseline_momentum: 0.9
+eval_interval: 1
+max_tasks_per_epoch: null
+max_new_tokens: 512
+temperature: 0.7
+do_sample: true
+dry_run:
+  max_tasks: 2
+  max_updates: 1
