@@ -5,28 +5,36 @@ RL for Test-Verifiable Code Repair Agents. A complete pipeline that trains code 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    MiniRepair-RL Pipeline                │
-├─────────────────────────────────────────────────────────┤
-│                                                         │
-│  ┌──────────┐    ┌──────────┐    ┌──────────────────┐  │
-│  │ Benchmark │───▶│  Agent   │───▶│ CodeRepairEnv    │  │
-│  │ 130 tasks │    │ ReAct/   │    │ MDP: 6 steps     │  │
-│  │ 2 repos   │    │ SFT/RL   │    │ 2 edits, 2 tests │  │
-│  └──────────┘    └──────────┘    └────────┬─────────┘  │
-│                                           │             │
-│                   ┌───────────────────────┼──────────┐  │
-│                   │          Tools         │          │  │
-│                   │ read_file  search_code │          │  │
-│                   │ edit_file  run_tests   │          │  │
-│                   │ submit     guardrails  │          │  │
-│                   └────────────────────────┘          │  │
-│                                                        │  │
-│  ┌─────────────┐    ┌──────────────┐    ┌───────────┐ │  │
-│  │ SFT (LoRA)  │───▶│ REINFORCE RL │───▶│ Eval &    │ │  │
-│  │ TRL Trainer │    │ sparse/dense │    │ Reports   │ │  │
-│  └─────────────┘    └──────────────┘    └───────────┘ │  │
-└────────────────────────────────────────────────────────┘
+                    ┌─────────────┐
+                    │  Benchmark  │
+                    │ 130 tasks   │
+                    │ 2 repos     │
+                    └──────┬──────┘
+                           │
+                           ▼
+                    ┌─────────────┐
+                    │   Agent     │
+                    │ ReAct/SFT/RL│
+                    └──────┬──────┘
+                           │
+                           ▼
+              ┌────────────────────────┐
+              │    CodeRepairEnv       │
+              │ MDP: 6 steps, 2 edits  │
+              └───────────┬────────────┘
+                          │
+           ┌──────────────┼──────────────┐
+           ▼              ▼              ▼
+    ┌────────────┐ ┌────────────┐ ┌────────────┐
+    │ read_file  │ │ edit_file  │ │ run_tests  │
+    │ search_code│ │ guardrails │ │   submit   │
+    └────────────┘ └────────────┘ └────────────┘
+
+    ┌──────────┐   ┌───────────┐   ┌───────────┐
+    │ SFT LoRA │──▶│ REINFORCE │──▶│ Eval &    │
+    │ TRL      │   │ sparse/   │   │ Reports   │
+    │          │   │ dense     │   │           │
+    └──────────┘   └───────────┘   └───────────┘
 ```
 
 ## Key Results
