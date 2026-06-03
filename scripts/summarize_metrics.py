@@ -237,14 +237,32 @@ def main() -> None:
         # Try to load additional info from summary.json
         summary = load_summary_from_dir(input_dir)
 
+        # Extract metadata: prefer summary.json, fall back to metrics.csv / dir name
+        csv_policy = filtered[0].get("policy_type", "unknown") if filtered else "unknown"
+        csv_method = filtered[0].get("method_name", "react") if filtered else "react"
+
+        policy_type = (summary.get("policy_type") if summary else None) or csv_policy or "unknown"
+        method_name = (summary.get("method_name") if summary else None) or csv_method or "react"
+        eval_mode = (summary.get("eval_mode") if summary else None)
+        if not eval_mode or eval_mode == "unknown":
+            dir_name = input_dir.name.lower()
+            if "test" in dir_name:
+                eval_mode = "final_test"
+            elif "validation" in dir_name:
+                eval_mode = "validation_selection"
+            elif "train" in dir_name:
+                eval_mode = "train_reward"
+            else:
+                eval_mode = "unknown"
+
         input_results.append({
             "input_dir": str(input_dir),
             "total_metrics": len(all_metrics),
             "filtered_metrics": len(filtered),
             "aggregate": agg,
-            "policy_type": summary.get("policy_type", "unknown") if summary else (filtered[0].get("policy_type", "unknown") if filtered else "unknown"),
-            "method_name": summary.get("method_name", "react") if summary else (filtered[0].get("method_name", "react") if filtered else "react"),
-            "eval_mode": summary.get("eval_mode", "unknown") if summary else "unknown",
+            "policy_type": policy_type,
+            "method_name": method_name,
+            "eval_mode": eval_mode,
         })
 
     output_path = Path(args.output) if args.output else Path("reports/react_baseline.md")

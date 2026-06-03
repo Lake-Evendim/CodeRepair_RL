@@ -39,16 +39,16 @@ RL for Test-Verifiable Code Repair Agents. A complete pipeline that trains code 
 
 ## Key Results
 
-| Method | Test Hidden Pass | Public Pass | Invalid Edit | Avg Steps |
-|--------|:----------------:|:-----------:|:------------:|:---------:|
-| ReAct (base) | 60.0% | 3.3% | 0.13 | 5.53 |
-| SFT (LoRA) | **70.0%** | 16.7% | 0.60 | 4.47 |
-| RL Sparse | **70.0%** | 16.7% | 0.57 | 4.47 |
-| RL Dense | **70.0%** | 16.7% | 0.60 | 4.43 |
+| Method | Test Hidden Pass | Public Pass | Invalid Edit | Avg Steps | Avg Regressions |
+|--------|:----------------:|:-----------:|:------------:|:---------:|:---------------:|
+| ReAct (base) | 60.0% | 3.3% | 0.13 | 5.53 | 0.20 |
+| SFT (LoRA) | **70.0%** | 16.7% | 0.60 | 4.47 | 0.10 |
+| RL Sparse | **70.0%** | 16.7% | 0.57 | 4.47 | 0.10 |
+| RL Dense | **70.0%** | 16.7% | 0.60 | 4.40 | 0.07 |
 
 Base model: Qwen2.5-Coder-1.5B-Instruct. Hardware: RTX 4090 24GB.
 
-SFT achieves 84.6% reduction in invalid edits over ReAct. Trained methods (SFT, RL) improve hidden pass rate by +10% over the base model. Dense and sparse reward produce identical results on this benchmark.
+SFT and RL both achieve 70% hidden pass rate (+10% over ReAct). RL Dense slightly reduces regressions (0.07 vs 0.10) and avg steps (4.40 vs 4.47) compared to SFT, but hidden pass rate does not improve further. The benchmark may be too simple for RL to show clear benefit over SFT.
 
 ## Installation
 
@@ -126,16 +126,16 @@ RL starts from the SFT adapter and uses REINFORCE with moving-average baseline.
 
 ```bash
 # SFT
-python scripts/evaluate.py --method sft --split validation --eval-mode validation_selection --adapter outputs/sft_adapter --output logs/eval/sft_validation
-python scripts/evaluate.py --method sft --split test --eval-mode final_test --adapter outputs/sft_adapter --output logs/eval/sft_test
+python scripts/evaluate.py --method sft --split validation --eval-mode validation_selection --adapter outputs/sft_adapter_trained --output logs/eval/sft_validation
+python scripts/evaluate.py --method sft --split test --eval-mode final_test --adapter outputs/sft_adapter_trained --output logs/eval/sft_test
 
 # RL Sparse
-python scripts/evaluate.py --method rl_sparse --split validation --eval-mode validation_selection --adapter outputs/rl_sparse_adapter --output logs/eval/rl_sparse_validation
-python scripts/evaluate.py --method rl_sparse --split test --eval-mode final_test --adapter outputs/rl_sparse_adapter --output logs/eval/rl_sparse_test
+python scripts/evaluate.py --method rl_sparse --split validation --eval-mode validation_selection --adapter outputs/rl_sparse_adapter_trained --output logs/eval/rl_sparse_validation
+python scripts/evaluate.py --method rl_sparse --split test --eval-mode final_test --adapter outputs/rl_sparse_adapter_trained --output logs/eval/rl_sparse_test
 
 # RL Dense
-python scripts/evaluate.py --method rl_dense --split validation --eval-mode validation_selection --adapter outputs/rl_dense_adapter --output logs/eval/rl_dense_validation
-python scripts/evaluate.py --method rl_dense --split test --eval-mode final_test --adapter outputs/rl_dense_adapter --output logs/eval/rl_dense_test
+python scripts/evaluate.py --method rl_dense --split validation --eval-mode validation_selection --adapter outputs/rl_dense_adapter_trained --output logs/eval/rl_dense_validation
+python scripts/evaluate.py --method rl_dense --split test --eval-mode final_test --adapter outputs/rl_dense_adapter_trained --output logs/eval/rl_dense_test
 ```
 
 ### 7. Generate Reports
@@ -162,6 +162,8 @@ python scripts/analyze_failures.py \
   --output reports/failure_analysis.md
 ```
 
+Note: The actual evaluation logs in this repo use suffixed directory names (e.g. `react_test_full`, `rl_sparse_test_trained`). Adjust the `--inputs` paths accordingly when reproducing.
+
 ## Project Structure
 
 ```
@@ -181,14 +183,16 @@ logs/           # Evaluation logs and trajectories
 
 ## Failure Analysis Summary
 
-Top failure categories across all methods (73 failed episodes):
+Top failure categories across all methods (177 failed episodes):
 
 | Category | Count | % |
 |----------|:-----:|:--:|
-| Invalid edit (guardrail blocked) | 34 | 46.6% |
-| Regression error | 20 | 27.4% |
-| Tool misuse (no edit attempted) | 10 | 13.7% |
-| Invalid action (bad JSON) | 9 | 12.3% |
+| Invalid edit (guardrail blocked) | 90 | 50.8% |
+| Regression error | 31 | 17.5% |
+| Tool misuse (no edit attempted) | 27 | 15.3% |
+| Invalid action (bad JSON) | 13 | 7.3% |
+| Localization error | 10 | 5.6% |
+| Premature submit | 6 | 3.4% |
 
 ## Limitations
 

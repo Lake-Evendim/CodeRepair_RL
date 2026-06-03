@@ -144,14 +144,14 @@ All use Qwen2.5-Coder-1.5B-Instruct as base model:
 | ReAct | 60.0% | 3.3% | 0.13 | 0.20 | 5.53 |
 | SFT | 70.0% | 16.7% | 0.60 | 0.10 | 4.47 |
 | RL Sparse | 70.0% | 16.7% | 0.57 | 0.10 | 4.47 |
-| RL Dense | 70.0% | 16.7% | 0.60 | 0.10 | 4.43 |
+| RL Dense | 70.0% | 16.7% | 0.60 | 0.07 | 4.40 |
 
 ### Key Findings
 1. SFT improves hidden pass rate by +10% over ReAct (60% -> 70%)
-2. SFT reduces invalid edits by 84.6% compared to ReAct on validation (1.30 -> 0.20)
-3. RL (both sparse and dense) does not improve over SFT on this benchmark
-4. Dense and sparse reward produce identical results
-5. Large public-hidden gap (~53%) indicates generalization challenge
+2. RL (both sparse and dense) does not improve hidden pass rate over SFT on this benchmark
+3. RL Dense slightly reduces regressions (0.07 vs 0.10) and avg steps (4.40 vs 4.47) compared to SFT
+4. Large public-hidden gap (~53%) indicates generalization challenge
+5. The benchmark may be too simple for RL to show clear benefit over SFT
 
 ### Reward Ablation
 
@@ -170,29 +170,31 @@ All use Qwen2.5-Coder-1.5B-Instruct as base model:
 
 ## 9. Failure Analysis
 
-73 failed episodes analyzed across all methods.
+177 failed episodes analyzed across all methods.
 
 ### Failure Distribution
 
 | Category | Count | % of Failures |
 |----------|:-----:|:-------------:|
-| Invalid edit (guardrail blocked) | 34 | 46.6% |
-| Regression error | 20 | 27.4% |
-| Tool misuse | 10 | 13.7% |
-| Invalid action (bad JSON) | 9 | 12.3% |
+| Invalid edit (guardrail blocked) | 90 | 50.8% |
+| Regression error | 31 | 17.5% |
+| Tool misuse | 27 | 15.3% |
+| Invalid action (bad JSON) | 13 | 7.3% |
+| Localization error | 10 | 5.6% |
+| Premature submit | 6 | 3.4% |
 
 ### Multi-label Categories
 
 | Category | Occurrences |
 |----------|:-----------:|
-| Localization error | 54 |
-| Premature submit | 37 |
-| Invalid edit | 34 |
-| Regression error | 21 |
-| Semantic patch error | 21 |
-| Tool misuse | 13 |
-| Invalid action | 9 |
-| Context misunderstanding | 6 |
+| Localization error | 137 |
+| Premature submit | 98 |
+| Invalid edit | 90 |
+| Semantic patch error | 42 |
+| Regression error | 35 |
+| Tool misuse | 30 |
+| Invalid action | 13 |
+| Context misunderstanding | 10 |
 
 ### Representative Cases
 - **task_0081 (SFT)**: Agent produced invalid JSON action, never attempted edit. Premature submit.

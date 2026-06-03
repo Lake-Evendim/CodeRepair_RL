@@ -73,14 +73,18 @@ def select_case_studies(
     input_dirs: list[Path],
     max_per_category: int = 2,
 ) -> list[str]:
-    """Select and format representative case studies per failure category."""
+    """Select and format representative case studies per failure category.
+
+    Ensures every category in FAILURE_CATEGORIES gets case studies by iterating
+    per-category and picking episodes that contain that category, rather than
+    assigning episodes to a single "primary" category.
+    """
     # Build a mapping from task_id -> (metrics, input_dir) for failed episodes
     failed_tasks: list[tuple[dict, Path]] = []
     for m in metrics_list:
         if safe_bool(m.get("public_pass")):
             continue
         task_id = m.get("task_id", "unknown")
-        # Find which input dir contains this task's trajectory
         for input_dir in input_dirs:
             if (input_dir / f"{task_id}.jsonl").exists():
                 failed_tasks.append((m, input_dir))
@@ -97,40 +101,47 @@ def select_case_studies(
         if not result["passed"] and result["all_categories"]:
             classified.append((m, result["all_categories"], input_dir))
 
-    # Select up to max_per_category case studies per primary category
-    category_counts: dict[str, int] = {cat: 0 for cat in FAILURE_CATEGORIES}
-    case_studies: list[str] = []
+    # Select case studies per category, ensuring every category is covered.
+    # Track which (task_id, method) pairs have already been selected to avoid
+    # duplicates across categories.
+    selected_keys: set[tuple[str, str]] = set()
+    category_case_studies: dict[str, list[str]] = {cat: [] for cat in FAILURE_CATEGORIES}
 
-    # Prioritize by: category in priority order, then by most categories matched
-    def priority_key(item):
-        m, cats, _ = item
-        primary_idx = 99
-        for i, cat in enumerate(FAILURE_CATEGORIES):
-            if cat in cats:
-                primary_idx = i
-                break
-        return (primary_idx, -len(cats))
-
-    classified.sort(key=priority_key)
-
+    # Build index: category -> list of (metrics, cats, input_dir) episodes
+    category_episodes: dict[str, list[tuple[dict, list[str], Path]]] = {cat: [] for cat in FAILURE_CATEGORIES}
     for m, cats, input_dir in classified:
-        primary = cats[0] if cats else "unknown"
-        if category_counts.get(primary, 0) >= max_per_category:
-            continue
+        for cat in cats:
+            if cat in category_episodes:
+                category_episodes[cat].append((m, cats, input_dir))
 
-        task_id = m.get("task_id", "unknown")
-        method = m.get("method_name", "unknown")
-        trajectory = load_trajectory(input_dir, task_id)
+    # First pass: ensure each category gets at least 1 case study
+    for cat in FAILURE_CATEGORIES:
+        episodes = category_episodes[cat]
+        count = 0
+        for m, cats, input_dir in episodes:
+            if count >= max_per_category:
+                break
+            task_id = m.get("task_id", "unknown")
+            method = m.get("method_name", "unknown")
+            key = (task_id, method)
+            if key in selected_keys:
+                continue
+            trajectory = load_trajectory(input_dir, task_id)
+            cs = format_case_study(
+                task_id=task_id,
+                method=method,
+                metrics=m,
+                failure_types=cats,
+                trajectory=trajectory,
+            )
+            category_case_studies[cat].append(cs)
+            selected_keys.add(key)
+            count += 1
 
-        cs = format_case_study(
-            task_id=task_id,
-            method=method,
-            metrics=m,
-            failure_types=cats,
-            trajectory=trajectory,
-        )
-        case_studies.append(cs)
-        category_counts[primary] = category_counts.get(primary, 0) + 1
+    # Flatten, preserving category order from FAILURE_CATEGORIES
+    case_studies: list[str] = []
+    for cat in FAILURE_CATEGORIES:
+        case_studies.extend(category_case_studies[cat])
 
     return case_studies
 

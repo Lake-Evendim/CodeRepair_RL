@@ -24,9 +24,9 @@
 **MiniRepair-RL: RL for Code Repair Agents** | Python, PyTorch, LoRA, REINFORCE
 
 - Built a complete code repair agent RL pipeline: 130-task benchmark, MDP environment with 5 structured tools and guardrails, SFT (LoRA) and REINFORCE RL training, unified evaluation
-- SFT-trained Qwen2.5-Coder-1.5B achieved 70% hidden test pass rate (+10% over ReAct baseline), with 84.6% reduction in invalid edit attempts through gold trajectory imitation
+- SFT-trained Qwen2.5-Coder-1.5B achieved 70% hidden test pass rate (+10% over ReAct baseline); RL Dense further reduced avg regressions (0.07 vs 0.10) and steps (4.40 vs 4.47), though hidden pass rate did not improve beyond SFT
 - Implemented dense reward shaping with 7 signal types (edit quality, regression detection, progress tracking, efficiency penalties) and anti-reward-hacking guardrails blocking test manipulation and hardcoded returns
-- Analyzed 73 failure episodes across 9-category taxonomy (localization, regression, tool misuse, etc.), identifying invalid edits (46.6%) and regression errors (27.4%) as primary failure modes
+- Analyzed 177 failure episodes across 9-category taxonomy (localization, regression, tool misuse, etc.), identifying invalid edits (50.8%) and regression errors (17.5%) as primary failure modes
 
 ---
 
@@ -38,7 +38,7 @@
 
 - Designed and end-to-end implemented a code repair agent system: synthetic benchmark (130 tasks, 140 bug variants), interactive MDP environment, SFT and RL training, and multi-metric evaluation
 - Built constrained tool interface with 5 tools, edit guardrails (single-file, max 5 lines, forbidden path detection), and heuristic reward-hacking detection, ensuring training signal integrity
-- SFT on Qwen2.5-Coder-1.5B (LoRA, 648 gold trajectories) achieved 70% hidden pass rate, 84.6% fewer invalid edits than zero-shot ReAct, demonstrating value of structured trajectory imitation
+- SFT on Qwen2.5-Coder-1.5B (LoRA, 648 gold trajectories) achieved 70% hidden pass rate (+10% over ReAct), demonstrating value of structured trajectory imitation; REINFORCE RL matched SFT on pass rate but reduced regressions
 - Established evaluation discipline: EvalMode-enforced test isolation (public/private/hidden), 13 metric dimensions, 9-category failure taxonomy, and reproducible command pipeline — enabling rigorous comparison of ReAct, SFT, and RL methods
 
 ---
@@ -61,8 +61,7 @@
 |--------|--------|------|
 | `70%` | hidden test pass rate | 最终评估的核心指标 |
 | `+10%` | 相对 ReAct 的提升 | SFT/RL 的增量价值 |
-| `84.6%` | invalid edit 下降比例 | SFT 的工具使用质量提升 |
 | `130` | 任务总数 | benchmark 规模 |
 | `140` | bug 变体数 | 多样性 |
-| `73` | 失败 episode 数 | 分析样本量 |
-| `46.6%` / `27.4%` | 主要失败类别占比 | failure analysis 发现 |
+| `177` | 失败 episode 数 | 分析样本量 |
+| `50.8%` / `17.5%` | 主要失败类别占比 | failure analysis 发现 |
