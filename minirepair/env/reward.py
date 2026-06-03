@@ -71,7 +71,6 @@ class RewardCalculator:
         if self.reward_mode == "sparse":
             return 0.0
 
-        info = step_info or {}
         obs_info = step_obs.get("info", {})
         tool = step_obs.get("tool_name", "")
         status = step_obs.get("status", "")

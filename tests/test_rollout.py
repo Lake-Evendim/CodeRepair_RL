@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -191,8 +190,6 @@ class TestCollectRollout:
         env = CodeRepairEnv()
         try:
             result = collect_rollout(env, task_dir, policy, reward_calc)
-            # Sum of step rewards (before env.close())
-            step_sum = sum(s.reward for s in result.steps)
         finally:
             env.close()
 

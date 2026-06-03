@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
 
 from minirepair.agents.action_parser import extract_action_from_llm_output
 from minirepair.agents.react_agent import Policy, build_react_prompt
