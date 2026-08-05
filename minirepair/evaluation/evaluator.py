@@ -205,6 +205,9 @@ class Evaluator:
                 })
 
         agg = aggregate_metrics(metrics_list)
+        agg["method_name"] = self.method_name
+        agg["policy_type"] = self.policy.policy_type
+        agg["eval_mode"] = self.eval_mode.value
 
         # Write outputs
         if self.trajectory_dir:

@@ -36,9 +36,9 @@ All CLI flags verified against `--help` output.
 
 | Report | Input Source | Status |
 |--------|-------------|:------:|
-| `reports/main_results.md` | `logs/eval/react_test_full`, `sft_test_full`, `rl_sparse_test_full`, `rl_dense_test_full` | PASS |
-| `reports/reward_ablation.md` | `logs/eval/rl_sparse_validation_full`, `rl_dense_validation_full`, `rl_sparse_test_full`, `rl_dense_test_full` | PASS |
-| `reports/failure_analysis.md` | All eval log directories | PASS |
+| `reports/main_results.md` | `logs/eval/react_test_full`, `sft_test_full`, `rl_sparse_test_trained`, `rl_dense_test_trained` | PASS |
+| `reports/reward_ablation.md` | `logs/eval/rl_sparse_validation_trained`, `rl_dense_validation_trained`, `rl_sparse_test_trained`, `rl_dense_test_trained` | PASS |
+| `reports/failure_analysis.md` | All eval log directories (including `_trained` RL logs) | PASS |
 | `reports/dataset_report.md` | Benchmark task metadata | PASS |
 
 ## 4. Data Boundary Compliance
@@ -74,4 +74,4 @@ All CLI flags verified against `--help` output.
 ## 7. Known Issues
 
 1. **`main_results.md` metadata**: Some fields show "unknown" for policy/method/eval_mode. This is a cosmetic issue in `summarize_metrics.py` not reading summary.json metadata correctly. Does not affect metric values.
-2. **RL = SFT performance**: REINFORCE did not improve over SFT. Documented in technical report as a limitation, not a bug.
+2. **RL = SFT performance**: REINFORCE did not improve hidden pass rate over SFT. RL Dense shows slight improvement in regressions (0.07 vs 0.10) and avg steps (4.40 vs 4.47). Documented in technical report as a limitation, not a bug.

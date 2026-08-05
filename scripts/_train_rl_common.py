@@ -76,11 +76,12 @@ def _load_policy(config: dict[str, Any], reward_mode: str) -> tuple[Any, Any]:
     model = AutoModelForCausalLM.from_pretrained(
         model_path,
         torch_dtype=torch.float16 if device == "cuda" else torch.float32,
-        device_map="auto" if device == "cuda" else None,
+        device_map={"": 0} if device == "cuda" else None,
         trust_remote_code=True,
     )
     model = PeftModel.from_pretrained(model, sft_adapter)
     model.enable_adapter_layers()
+    model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     model.train()
 
     logger.info("Loaded model with SFT adapter from %s", sft_adapter)
@@ -140,9 +141,10 @@ def run_rl_training(
     max_tasks_per_epoch = config.get("max_tasks_per_epoch", None)
 
     dry_cfg = config.get("dry_run", {})
-    max_updates = dry_cfg.get("max_updates", None)
+    max_updates = None
     if dry_run:
         max_tasks_per_epoch = dry_cfg.get("max_tasks", 2)
+        max_updates = dry_cfg.get("max_updates", None)
         num_epochs = 1
 
     # Load model and tokenizer
@@ -197,9 +199,25 @@ def run_rl_training(
             )
             epoch_losses.append(update_result.loss)
 
+            task_returns = [r.total_return for r in task_rollouts]
+            logger.info(
+                "  [%d/%d] %s: returns=%s, loss=%.4f, advantage=%.4f",
+                task_idx + 1, len(epoch_tasks), task_path.name,
+                [f"{r:.2f}" for r in task_returns],
+                update_result.loss, update_result.avg_advantage,
+            )
+
+            # Free GPU memory from computation graph
+            torch.cuda.empty_cache()
+
             if max_updates and task_idx + 1 >= max_updates:
                 logger.info("Dry-run: stopping after %d update(s)", task_idx + 1)
                 break
+
+        # Update baseline once per epoch with mean return
+        if epoch_returns:
+            epoch_mean_return = sum(epoch_returns) / len(epoch_returns)
+            baseline.update(epoch_mean_return)
 
         # Log epoch stats
         avg_loss = sum(epoch_losses) / len(epoch_losses) if epoch_losses else 0.0
