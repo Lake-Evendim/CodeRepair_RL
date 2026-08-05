@@ -247,8 +247,8 @@ class TestReinforceUpdate:
         result = reinforce_update(model, tokenizer, rollouts, baseline, optimizer)
         assert result.num_trajectories == 2  # Both included
 
-    def test_baseline_updates(self, model_and_tokenizer):
-        """Baseline should update after each rollout."""
+    def test_baseline_is_not_updated_within_batch(self, model_and_tokenizer):
+        """The caller, not a trajectory batch, should update the baseline."""
         model, tokenizer = model_and_tokenizer
         model.train()
 
@@ -268,8 +268,6 @@ class TestReinforceUpdate:
 
         result = reinforce_update(model, tokenizer, rollouts, baseline, optimizer)
 
-        # Baseline should have been updated
-        assert baseline.initialized is True
-        # After two updates: first sets to 1.0, second: 0.9*1.0 + 0.1*0.5 = 0.95
-        assert baseline.value == pytest.approx(0.95)
-        assert result.baseline == pytest.approx(0.95)
+        assert baseline.initialized is False
+        assert baseline.value == pytest.approx(0.0)
+        assert result.baseline == pytest.approx(0.0)

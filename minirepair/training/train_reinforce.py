@@ -58,6 +58,9 @@ def reinforce_update(
     3. Compute advantage = total_return - baseline
     4. Accumulate loss = -advantage.detach() * trajectory_log_prob
 
+    All trajectories use the same baseline snapshot. The caller owns baseline
+    updates so a batch is not biased by trajectory ordering.
+
     Invalid JSON/action trajectories are NOT discarded.
 
     Args:
@@ -78,15 +81,17 @@ def reinforce_update(
     advantages = []
     num_valid = 0
 
+    # Use current baseline (not updated within this call)
+    current_baseline = baseline.value if baseline.initialized else 0.0
+
     for rollout in rollout_results:
-        # Update baseline with this trajectory's return
-        current_baseline = baseline.update(rollout.total_return)
         advantage = rollout.total_return - current_baseline
         returns.append(rollout.total_return)
         advantages.append(advantage)
 
         # Re-forward all steps to get fresh log-probs with grad
-        step_log_probs = []
+        # Accumulate log-prob scalar directly to avoid storing intermediate graphs
+        trajectory_log_prob = torch.tensor(0.0, device=device, requires_grad=True)
         for step in rollout.steps:
             prompt_text = step.prompt
             action_text = step.raw_output
@@ -100,16 +105,17 @@ def reinforce_update(
             # Forward with grad
             outputs = model(full_ids, attention_mask=attention_mask)
 
-            # Compute action log-probs (with grad)
+            # Compute action log-probs (with grad) and accumulate immediately
             token_log_probs = compute_action_log_probs(
                 outputs.logits, action_ids, prompt_ids.shape[1]
             )
-            step_log_probs.append(compute_trajectory_log_prob(token_log_probs))
+            step_lp = compute_trajectory_log_prob(token_log_probs)
+            trajectory_log_prob = trajectory_log_prob + step_lp
 
-        if step_log_probs:
-            trajectory_log_prob = torch.stack(step_log_probs).sum()
-        else:
-            trajectory_log_prob = torch.tensor(0.0, device=device, requires_grad=True)
+            # Free intermediate tensors
+            del outputs, full_ids, attention_mask, prompt_ids, action_ids
+            del token_log_probs, step_lp
+            torch.cuda.empty_cache()
 
         # REINFORCE loss: -advantage * trajectory_log_prob
         loss_term = -advantage * trajectory_log_prob
